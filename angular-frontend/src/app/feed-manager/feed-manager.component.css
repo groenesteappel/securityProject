@@ -1,0 +1,11 @@
+/* Style for the selected URL */
+.selected {
+  background-color: #f0f0f0; /* Light grey, for example */
+  font-weight: bold;
+}
+
+/* Basic style for the loading indicator, if needed */
+.loading {
+  color: #000;
+  text-align: center;
+}

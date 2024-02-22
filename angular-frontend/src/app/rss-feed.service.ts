@@ -20,7 +20,6 @@ export class RssFeedService {
   }
 
   removeFeedUrl(url: string) {
-    // Adjust according to your backend's expected request format
     return this.http.request('delete', `${this.baseUrl}/removeUrl`, {
       body: { url },
     });
@@ -28,5 +27,8 @@ export class RssFeedService {
 
   listFeedUrls() {
     return this.http.get<string[]>(`${this.baseUrl}/listUrls`);
+  }
+  fetchAllFeeds() {
+    return this.http.get<any[]>(`${this.baseUrl}/fetchAllFeeds`);
   }
 }

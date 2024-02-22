@@ -1,3 +1,12 @@
 [
+<<<<<<< HEAD
   "https://www.cisa.gov/news.xml"
+=======
+  "https://msrc.microsoft.com/blog/feed",
+  "https://advisories.ncsc.nl/rss/advisories",
+  "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+  "https://oval.mitre.org/news/rss/ovalnews.feed.xml",
+  "https://www.zerodayinitiative.com/rss/upcoming/",
+  "asdasd"
+>>>>>>> 4815b904b52dea7b7afcc81cc1c3e943bf61ddc7
 ]

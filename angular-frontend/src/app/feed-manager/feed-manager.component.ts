@@ -16,6 +16,9 @@ export class FeedManagerComponent implements OnInit {
 
   constructor(private rssFeedService: RssFeedService) {}
 
+  loading = false;
+  selectedUrl: string | null = null;
+
   ngOnInit() {
     this.loadFeedUrls();
   }
@@ -44,6 +47,23 @@ export class FeedManagerComponent implements OnInit {
     this.rssFeedService.removeFeedUrl(url).subscribe({
       next: () => this.loadFeedUrls(), // Reload the list after removing
       error: (error) => console.error('Failed to remove feed URL', error),
+    });
+  }
+
+  fetchedFeed: any = null;
+
+  fetchFeed(url: string) {
+    this.loading = true;
+    this.selectedUrl = url;
+    this.rssFeedService.fetchFeed(url).subscribe({
+      next: (feedData) => {
+        this.fetchedFeed = feedData;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to fetch feed', error);
+        this.loading = false;
+      },
     });
   }
 }
