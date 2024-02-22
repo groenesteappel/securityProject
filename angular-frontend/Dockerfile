@@ -1,7 +1,11 @@
 FROM rockylinux:9
 
-# Install Node.js 16.x
+RUN curl -fsSL https://rpm.nodesource.com/setup_21.x | bash -
+
+# Install Node.js 
 RUN dnf install -y nodejs
+
+RUN node --version && npm --version 
 
 # Install Angular CLI globally
 RUN npm install -g @angular/cli
