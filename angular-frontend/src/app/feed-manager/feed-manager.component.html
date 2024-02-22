@@ -5,8 +5,27 @@
 </div>
 
 <ul>
-  <li *ngFor="let url of feedUrls">
+  <li
+    *ngFor="let url of feedUrls"
+    (click)="fetchFeed(url)"
+    [class.selected]="url === selectedUrl"
+  >
     {{ url }}
-    <button (click)="removeUrl(url)">Remove</button>
+    <button (click)="removeUrl(url); $event.stopPropagation()">Remove</button>
   </li>
 </ul>
+
+<!-- Loading Indicator -->
+<div *ngIf="loading">
+  <p>Loading feed...</p>
+</div>
+
+<div *ngIf="fetchedFeed && !loading">
+  <h2>{{ fetchedFeed.title }}</h2>
+  <ul>
+    <li *ngFor="let item of fetchedFeed.items">
+      <h3>{{ item.title }}</h3>
+      <div [innerHTML]="item.content || item.description"></div>
+    </li>
+  </ul>
+</div>

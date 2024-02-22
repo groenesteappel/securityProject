@@ -1,3 +1,8 @@
 [
-  "https://test.be"
+  "https://test.be",
+  "https://msrc.microsoft.com/blog/feed",
+  "https://advisories.ncsc.nl/rss/advisories",
+  "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+  "https://oval.mitre.org/news/rss/ovalnews.feed.xml",
+  "https://www.zerodayinitiative.com/rss/upcoming/"
 ]
