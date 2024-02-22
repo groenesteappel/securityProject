@@ -65,6 +65,7 @@ Delete image:
 docker rmi security-project-app
 ```
 
+Run image with WSL:
 ```
 docker run -it -p 172.27.52.159:4200:4200 security-project-app
 ```
