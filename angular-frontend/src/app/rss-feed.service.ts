@@ -28,4 +28,7 @@ export class RssFeedService {
   listFeedUrls() {
     return this.http.get<string[]>(`${this.baseUrl}/listUrls`);
   }
+  fetchAllFeeds() {
+    return this.http.get<any[]>(`${this.baseUrl}/fetchAllFeeds`);
+  }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { fetchRSSFeed, addFeedUrl, removeFeedUrl, getFeedUrls } = require('../services/feedService');
+const { fetchRSSFeed, addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds } = require('../services/feedService');
 
 
 router.get('/feed', async (req, res) => {
@@ -55,6 +55,14 @@ router.get('/listUrls', async (req, res) => {
         res.json(feeds);
     } catch (error) {
         res.status(500).json({ error: 'Error listing feed URLs' });
+    }
+});
+router.get('/fetchAllFeeds', async (req, res) => {
+    try {
+        const aggregatedFeeds = await aggregateAndSortFeeds();
+        res.json(aggregatedFeeds);
+    } catch (error) {
+        res.status(500).send('Failed to aggregate feeds');
     }
 });
 

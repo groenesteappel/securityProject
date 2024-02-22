@@ -1,0 +1,12 @@
+<p>aggregated-feed works!</p>
+
+<!-- AggregatedFeedComponent.html -->
+<div *ngIf="loading">Loading...</div>
+<ul *ngIf="!loading">
+  <li *ngFor="let item of aggregatedFeedItems">
+    <h3>{{ item.title }}</h3>
+    <p>{{ item.pubDate | date }}</p>
+    <!-- Display publication date -->
+    <div [innerHTML]="item.content || item.description"></div>
+  </li>
+</ul>
