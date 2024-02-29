@@ -3,7 +3,7 @@ const parser = new Parser();
 
 const fs = require('fs').promises;
 const path = require('path');
-const FEEDS_FILE = path.join(__dirname, 'feeds.json');
+const FEEDS_FILE = path.join('feeds.json');
 
 const fetchRSSFeed = async (url) => {
     try {
@@ -32,6 +32,7 @@ async function removeFeedUrl(url) {
 async function getFeedUrls() {
     try {
         const data = await fs.readFile(FEEDS_FILE);
+        console.log(JSON.parse(data))
         return JSON.parse(data);
     } catch (error) {
         if (error.code === 'ENOENT') {
