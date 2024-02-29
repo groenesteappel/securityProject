@@ -22,7 +22,6 @@ RUN npm install
 # Copy the rest of the application source code
 COPY . .
 
-# Expose the port on which your Angular application will run
 EXPOSE 4200
 
 # Command to run the application when the container starts
