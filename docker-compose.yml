@@ -14,6 +14,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4201:4200"
+      - "49153:49153"
+    volumes:
+      - ./angular-frontend/:/usr/src/app/
     networks:
       - frontend
   backend1:
