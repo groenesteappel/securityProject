@@ -3,7 +3,9 @@ const parser = new Parser();
 
 const fs = require('fs').promises;
 const path = require('path');
-const FEEDS_FILE = path.join('feeds.json');
+const FEEDS_FILE = path.join(__dirname, 'feeds.json');
+
+
 
 const fetchRSSFeed = async (url) => {
     try {
@@ -30,19 +32,21 @@ async function removeFeedUrl(url) {
 }
 
 async function getFeedUrls() {
+    console.log(`Looking for feeds.json at: ${FEEDS_FILE}`);
+
     try {
         const data = await fs.readFile(FEEDS_FILE);
-        console.log(JSON.parse(data))
         return JSON.parse(data);
     } catch (error) {
         if (error.code === 'ENOENT') {
-            await saveFeedUrls([]); // Create file if it does not exist
-            return [];
+            console.error("The feeds.json file does not exist.");
+            throw new Error("The feeds.json file does not exist.");
         } else {
             throw error;
         }
     }
 }
+
 
 const aggregateAndSortFeeds = async () => {
     const feedUrls = await getFeedUrls(); // Retrieve all feed URLs
