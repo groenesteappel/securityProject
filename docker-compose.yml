@@ -19,6 +19,8 @@ services:
       - frontend
     volumes:
       - ./angular-frontend/:/usr/src/app/
+    depends_on:
+      - backend1
   backend1:
     build:
       context: ./backend
