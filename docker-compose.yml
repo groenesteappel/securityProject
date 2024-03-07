@@ -18,7 +18,7 @@ services:
     networks:
       - frontend
     volumes:
-      - ./angular-frontend/:/usr/src/app/
+      - ./angular-frontend/src:/usr/src/app/src
     depends_on:
       - backend1
   backend1:

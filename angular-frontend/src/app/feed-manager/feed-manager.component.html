@@ -1,4 +1,4 @@
-<h2>test</h2>
+<h2>test2</h2>
 <div>
   <input [(ngModel)]="newUrl" placeholder="Enter RSS Feed URL" />
   <button (click)="addUrl()">Add Feed URL ass we</button>
@@ -8,8 +8,7 @@
   <li
     *ngFor="let url of feedUrls"
     (click)="fetchFeed(url)"
-    [class.selected]="url === selectedUrl"
-  >
+    [class.selected]="url === selectedUrl">
     {{ url }}
     <button (click)="removeUrl(url); $event.stopPropagation()">Remove</button>
   </li>
