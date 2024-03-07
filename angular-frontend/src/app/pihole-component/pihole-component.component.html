@@ -1,11 +1,31 @@
-<p>pihole-component asd!</p>
-<div *ngIf="summary">
-    <h2>Pi-hole Dashboard</h2>
-    <p>Domains Being Blocked: {{ summary?.domains_being_blocked }}</p>
-    <p>DNS Queries Today: {{ summary.dns_queries_today }}</p>
-    <p>Ads Blocked Today: {{ summary.ads_blocked_today }}</p>
-    <p>Ads Percentage Today: {{ summary.ads_percentage_today }}</p>
-    <p>Unique Domains: {{ summary.unique_domains }}</p>
-    <!-- Add more statistics as needed -->
-    <p>Status: {{ summary.status }}</p>
-</div>
+<div class="dashboard">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-4">
+        <p-card>
+          <div class="card-content">
+            <h2>{{ summary?.dns_queries_today }}</h2>
+            <p>2 active clients</p>
+          </div>
+        </p-card>
+      </div>
+      
+      <div class="p-col-12 p-md-4">
+        <p-card>
+          <div class="card-content">
+            <h2>{{ summary?.ads_blocked_today }}</h2>
+            <p>List blocked queries</p>
+          </div>
+        </p-card>
+      </div>
+    
+      <div class="p-col-12 p-md-4">
+        <p-card>
+          <div class="card-content">
+            <h2>{{ summary?.ads_percentage_today }}%</h2>
+            <p>List all queries</p>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+  

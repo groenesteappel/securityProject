@@ -1,0 +1,30 @@
+.dashboard {
+    padding: 1rem;
+    background-color: #f8f9fa; /* Use a light background color */
+  }
+  
+  .p-grid {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .p-col-12 {
+    padding: 0.5rem; /* Add padding inside each column for spacing */
+  }
+  
+  p-card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 4px; /* Rounded corners for the cards */
+    background-color: #ffffff; /* White background for the card content */
+  }
+  
+  p-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Slightly larger shadow on hover for interactivity */
+  }
+  
+  .card-content {
+    padding: 2rem; /* Padding inside the card for content */
+    text-align: center; /* Center the text inside the card */
+  }
+  
