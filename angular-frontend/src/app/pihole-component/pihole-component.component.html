@@ -1,1 +1,11 @@
-<p>pihole-component works!</p>
+<p>pihole-component asd!</p>
+<div *ngIf="summary">
+    <h2>Pi-hole Dashboard</h2>
+    <p>Domains Being Blocked: {{ summary?.domains_being_blocked }}</p>
+    <p>DNS Queries Today: {{ summary.dns_queries_today }}</p>
+    <p>Ads Blocked Today: {{ summary.ads_blocked_today }}</p>
+    <p>Ads Percentage Today: {{ summary.ads_percentage_today }}</p>
+    <p>Unique Domains: {{ summary.unique_domains }}</p>
+    <!-- Add more statistics as needed -->
+    <p>Status: {{ summary.status }}</p>
+</div>
