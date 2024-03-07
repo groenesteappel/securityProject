@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:21-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -17,4 +17,3 @@ COPY . .
 
 # Start the application
 CMD ["ng", "serve", "--host", "0.0.0.0", "--poll", "1000"]
-

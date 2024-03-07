@@ -1,4 +1,4 @@
-FROM ubuntu:latest as gitdownloader
+FROM ubuntu:20.04 as gitdownloader
 
 RUN apt update -y && apt install git curl jq -y
 
@@ -15,7 +15,7 @@ RUN git describe --tags `git rev-list --tags --max-count=1`>/version.txt
 RUN cat /version.txt
 
 ARG PIHOLE_BASE
-FROM ubuntu:latest
+FROM ubuntu:20.04
 
 ENV TZ=Europe/Berlin
 ENV WEBPASSWORD=changeme
