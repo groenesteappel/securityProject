@@ -1,4 +1,3 @@
-# Use Rocky Linux as the base image
 FROM node:alpine
 
 WORKDIR /usr/src/app

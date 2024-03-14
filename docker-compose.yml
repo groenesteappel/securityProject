@@ -8,9 +8,23 @@ services:
       - "8080:80"
       - "53:53/tcp"
       - "53:53/udp"
+    environment:
+      TZ: Europe/Berlin
+      WEBPASSWORD: "changeme"
+      DNS1: "cloudflared#5053"
+      DNS2: "no"
     networks:
-      - frontend
-  frontend2:
+      - default
+  cloudflared:
+    build:
+      context: ./cloudflared
+      dockerfile: Dockerfile
+    ports:
+      - "5053:5053/udp"
+    networks:
+      - default
+    restart: unless-stopped
+  frontend:
     build:
       context: ./angular-frontend
       dockerfile: Dockerfile
@@ -18,19 +32,19 @@ services:
       - "4201:4200"
       - "49153:49153"
     networks:
-      - frontend
+      - default
     volumes:
       - ./angular-frontend/src:/usr/src/app/src
     depends_on:
-      - backend1
-  backend1:
+      - backend
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     networks:
-      - frontend
+      - default
 
 networks:
-  frontend:
+  default:
