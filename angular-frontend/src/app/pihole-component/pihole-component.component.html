@@ -1,31 +1,21 @@
-<div class="dashboard">
-    <div class="p-grid">
-      <div class="p-col-12 p-md-4">
-        <p-card>
-          <div class="card-content">
-            <h2>{{ summary?.dns_queries_today }}</h2>
-            <p>2 active clients</p>
-          </div>
-        </p-card>
-      </div>
-      
-      <div class="p-col-12 p-md-4">
-        <p-card>
-          <div class="card-content">
-            <h2>{{ summary?.ads_blocked_today }}</h2>
-            <p>List blocked queries</p>
-          </div>
-        </p-card>
-      </div>
-    
-      <div class="p-col-12 p-md-4">
-        <p-card>
-          <div class="card-content">
-            <h2>{{ summary?.ads_percentage_today }}%</h2>
-            <p>List all queries</p>
-          </div>
-        </p-card>
-      </div>
+<div class="container-pihole">
+  <div class="formgrid grid">
+    <div class="field col" *ngIf="summary">
+      <p-card header="Domains Being Blocked">
+        <div class="card-content">{{ summary.domains_being_blocked }}</div>
+      </p-card>
+    </div>
+
+    <div class="field col" *ngIf="summary">
+      <p-card header="DNS Queries Today">
+        <div class="card-content">{{ summary.dns_queries_today }}</div>
+      </p-card>
+    </div>
+
+    <div class="field col" *ngIf="summary">
+      <p-card header="Queries Blocked Today">
+        <div class="card-content">{{ summary.ads_blocked_today }}</div>
+      </p-card>
     </div>
   </div>
-  
+</div>
