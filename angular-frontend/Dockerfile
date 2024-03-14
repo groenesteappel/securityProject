@@ -17,5 +17,7 @@ COPY . .
 # Install Angular CLI globally
 RUN npm install -g @angular/cli
 
+RUN npm update
+
 # Start the application
 CMD ["ng", "serve", "--host", "0.0.0.0", "--poll", "1000"]
