@@ -1,0 +1,9 @@
+<input type="text" [(ngModel)]="searchTerm" (keyup)="filterItems()">
+<div *ngIf="filteredItems | async as items">
+  <ul>
+    <li *ngFor="let item of items">
+      {{item | json}}
+    </li>
+  </ul>
+</div>
+<div *ngIf="filteredItems | async">Loading...</div>
