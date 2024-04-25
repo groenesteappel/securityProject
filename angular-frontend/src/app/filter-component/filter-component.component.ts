@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 })
 export class FilterComponent {
   searchTerm: string = '';
-  loading: boolean = false;
 
   @Output() filteredItems = new EventEmitter<any[]>();
 
@@ -22,7 +21,6 @@ export class FilterComponent {
 
   
   filterItems(): void {
-    this.loading = true;
     let firstEmissionSent = false;
     this.rssFeedService.fetchAllFeeds()
       .subscribe(items => {
@@ -31,7 +29,6 @@ export class FilterComponent {
           console.log(filteredItems);
           this.filteredItems.emit(filteredItems);
           firstEmissionSent = true;
-          this.loading = false
         }
       });
   }
