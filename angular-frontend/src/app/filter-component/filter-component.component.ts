@@ -14,13 +14,15 @@ import { CommonModule } from '@angular/common';
 })
 export class FilterComponent {
   searchTerm: string = '';
+  loading: boolean = false;
 
-  @Output() filteredItems = new EventEmitter<string[]>();
+  @Output() filteredItems = new EventEmitter<any[]>();
 
   constructor(private rssFeedService: RssFeedService) {}
 
   
   filterItems(): void {
+    this.loading = true;
     let firstEmissionSent = false;
     this.rssFeedService.fetchAllFeeds()
       .subscribe(items => {
@@ -29,6 +31,7 @@ export class FilterComponent {
           console.log(filteredItems);
           this.filteredItems.emit(filteredItems);
           firstEmissionSent = true;
+          this.loading = false
         }
       });
   }

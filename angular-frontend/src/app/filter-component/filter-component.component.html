@@ -1,8 +1,11 @@
 <input type="text" [(ngModel)]="searchTerm" (keyup)="filterItems()">
 <div *ngIf="filteredItems | async as items">
-  <ul>
+  <ul *ngIf="!loading">
     <li *ngFor="let item of items">
-      {{item | json}}
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.pubDate | date }}</p>
+      <!-- Display publication date -->
+      <div [innerHTML]="item.content || item.description"></div>
     </li>
   </ul>
 </div>
