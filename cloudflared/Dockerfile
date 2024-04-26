@@ -5,4 +5,4 @@ RUN apt-get update && apt-get install -y wget && \
     chmod +x /usr/local/bin/cloudflared && \
     apt-get purge -y --auto-remove wget
 
-CMD ["/usr/local/bin/cloudflared", "proxy-dns", "--address", "0.0.0.0", "--port", "5053", "--upstream", "https://1.1.1.1/dns-query", "--upstream", "https://1.0.0.1/dns-query"]
+CMD ["/usr/local/bin/cloudflared", "proxy-dns", "--address", "0.0.0.0", "--port", "5053", "--upstream", "https://dns.quad9.net/dns-query", "--upstream", "https://dns9.quad9.net/dns-query"]
