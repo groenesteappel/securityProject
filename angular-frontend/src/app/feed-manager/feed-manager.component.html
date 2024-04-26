@@ -1,30 +1,57 @@
-<div>
-  <input [(ngModel)]="newUrl" placeholder="Enter RSS Feed URL" />
-  <button (click)="addUrl()">Add Feed URL</button>
-</div>
+<div class="p-3">
+  <p-accordion>
+    <p-accordionTab header="List Of RSS Feeds">
+      <div class="">
+        <p-floatLabel
+          ><input [(ngModel)]="newUrl" pInputText /><label
+            for="Enter RSS Feed URL"
+            >Enter RSS Feed URL</label
+          >
 
-<ul>
-  <li
-    *ngFor="let url of feedUrls"
-    (click)="fetchFeed(url)"
-    [class.selected]="url === selectedUrl"
-  >
-    {{ url }}
-    <button (click)="removeUrl(url); $event.stopPropagation()">Remove</button>
-  </li>
-</ul>
+          <p-button
+            class="p-3"
+            label="Submit"
+            icon="pi pi-check"
+            (click)="addUrl()"
+          ></p-button>
+        </p-floatLabel>
+      </div>
+      <p-table [value]="feedUrls" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>URL</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-url>
+          <tr [class.selected]="url === selectedUrl" (click)="fetchFeed(url)">
+            <td>{{ url }}</td>
+            <td>
+              <p-button
+                label="Remove"
+                (click)="removeUrl(url); $event.stopPropagation()"
+              >
+              </p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-accordionTab>
+  </p-accordion>
 
-<!-- Loading Indicator -->
-<div *ngIf="loading">
-  <p>Loading feed...</p>
-</div>
+  <!-- Loading Indicator -->
+  <div *ngIf="loading">
+    <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+  </div>
 
-<div *ngIf="fetchedFeed && !loading">
-  <h2>{{ fetchedFeed.title }}</h2>
-  <ul>
-    <li *ngFor="let item of fetchedFeed.items">
-      <h3>{{ item.title }}</h3>
-      <div [innerHTML]="item.content || item.description"></div>
-    </li>
-  </ul>
+  <div *ngIf="fetchedFeed && !loading">
+    <h2>{{ fetchedFeed.title }}</h2>
+
+    <ul *ngFor="let item of fetchedFeed.items">
+      <p-card header="{{ item.title }}" class="feed-card">
+        <p>{{ item.pubDate | date }}</p>
+        <div [innerHTML]="item.content || item.description"></div>
+      </p-card>
+    </ul>
+  </div>
 </div>

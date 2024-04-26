@@ -2,13 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { RssFeedService } from '../rss-feed.service'; // Adjust the path as necessary
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TableModule } from 'primeng/table';
+import { AccordionModule } from 'primeng/accordion';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-feed-manager',
   templateUrl: './feed-manager.component.html',
   styleUrls: ['./feed-manager.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ProgressSpinnerModule,
+    TableModule,
+    AccordionModule,
+    CommonModule,
+    ButtonModule,
+    InputTextModule,
+    FloatLabelModule,
+    CardModule,
+  ],
 })
 export class FeedManagerComponent implements OnInit {
   feedUrls: string[] = [];

@@ -3,9 +3,14 @@
   color: #7982ff; /* Light grey, for example */
   font-weight: bold;
 }
-
+ul {
+  padding: 0px;
+}
 /* Basic style for the loading indicator, if needed */
 .loading {
   color: #000;
   text-align: center;
+}
+:host ::ng-deep .p-accordion {
+  margin: 2rem;
 }

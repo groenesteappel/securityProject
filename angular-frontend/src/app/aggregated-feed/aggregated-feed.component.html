@@ -1,11 +1,15 @@
 <!-- AggregatedFeedComponent.html -->
-<div *ngIf="loading">Loading...</div>
+
+<div
+  *ngIf="loading"
+  class="h-screen flex justify-content-center align-items-center"
+>
+  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+</div>
 <ul *ngIf="!loading">
   <ul *ngFor="let item of aggregatedFeedItems">
-    <!-- Changed from <ul> to <li> for proper HTML structure -->
     <p-card header="{{ item.title }}" class="feed-card">
       <p>{{ item.pubDate | date }}</p>
-      <!-- Display publication date -->
       <div [innerHTML]="item.content || item.description"></div>
     </p-card>
   </ul>
