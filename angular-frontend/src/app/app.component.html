@@ -1,39 +1,7 @@
-<h1>Angular Router App</h1>
 <nav>
-  <ul>
-    <li>
-      <a
-        routerLink="/filter"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Filtered Feed</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/aggregated-feed"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Aggregated Feed</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/feed-dashboard"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Feed Dashboard</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/pihole-dashboard"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >pi-hole Dashboard</a
-      >
-    </li>
-  </ul>
+  <p-menubar [model]="gfg"
+    ><ng-template pTemplate="start"> <p>Naam</p> </ng-template></p-menubar
+  >
 </nav>
 <!-- The routed views render in the <router-outlet>-->
 <router-outlet></router-outlet>

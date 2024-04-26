@@ -1,35 +1,31 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RssFeedService } from '../rss-feed.service';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-
+import { RssFeedService } from '../rss-feed.service';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter-component.component.html',
   styleUrls: ['./filter-component.component.css'],
-  standalone: true, // Add standalone flag
-  imports: [FormsModule,CommonModule]
+  standalone: true,
+  imports: [FormsModule, CommonModule],
 })
 export class FilterComponent {
   searchTerm: string = '';
+  loading: boolean = false; // Declare the loading variable
 
   @Output() filteredItems = new EventEmitter<any[]>();
 
   constructor(private rssFeedService: RssFeedService) {}
 
-  
   filterItems(): void {
-    let firstEmissionSent = false;
-    this.rssFeedService.fetchAllFeeds()
-      .subscribe(items => {
-        if (!firstEmissionSent) {
-          const filteredItems = items.filter(item => item.content.toLowerCase().includes(this.searchTerm.toLowerCase()));
-          console.log(filteredItems);
-          this.filteredItems.emit(filteredItems);
-          firstEmissionSent = true;
-        }
-      });
+    this.loading = true; // Set loading to true when the filtering starts
+    this.rssFeedService.fetchAllFeeds().subscribe((items) => {
+      const filteredItems = items.filter((item) =>
+        item.content.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+      this.filteredItems.emit(filteredItems);
+      this.loading = false; // Set loading to false once the data is filtered and emitted
+    });
   }
 }

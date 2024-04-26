@@ -3,10 +3,6 @@ FROM node:20.11.1-alpine
 # Set working directory
 WORKDIR /usr/src/app
 
-
-
-
-
 # Copy only the package files to leverage Docker cache
 COPY package.json package-lock.json* ./
 

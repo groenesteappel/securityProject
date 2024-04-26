@@ -1,0 +1,6 @@
+ul {
+  padding: 0px;
+}
+:host ::ng-deep .p-card {
+  margin: 2rem;
+}

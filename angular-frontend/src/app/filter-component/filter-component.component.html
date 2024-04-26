@@ -1,4 +1,4 @@
-<input type="text" [(ngModel)]="searchTerm" (keyup)="filterItems()">
+<input type="text" [(ngModel)]="searchTerm" (keyup)="filterItems()" />
 <div *ngIf="filteredItems | async as items">
   <ul *ngIf="!loading">
     <li *ngFor="let item of items">

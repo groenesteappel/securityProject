@@ -19,8 +19,6 @@ FROM ubuntu:20.04
 
 ENV TZ=Europe/Berlin
 ENV WEBPASSWORD=changeme
-ENV PIHOLE_DNS_=9.9.9.9;149.112.112.112
-
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 

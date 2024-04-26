@@ -1,6 +1,6 @@
 /* Style for the selected URL */
 .selected {
-  background-color: #f0f0f0; /* Light grey, for example */
+  color: #7982ff; /* Light grey, for example */
   font-weight: bold;
 }
 
