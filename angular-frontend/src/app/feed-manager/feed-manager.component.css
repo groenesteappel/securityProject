@@ -12,5 +12,5 @@ ul {
   text-align: center;
 }
 :host ::ng-deep .p-accordion {
-  margin: 2rem;
+  margin-bottom: 1rem;
 }

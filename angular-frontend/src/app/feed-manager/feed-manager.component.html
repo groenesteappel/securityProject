@@ -38,7 +38,13 @@
       </p-table>
     </p-accordionTab>
   </p-accordion>
-
+  <input
+    type="text"
+    pInputText
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="filterFeedItems()"
+    placeholder="Search Feed Items"
+  />
   <!-- Loading Indicator -->
   <div *ngIf="loading">
     <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
@@ -47,11 +53,14 @@
   <div *ngIf="fetchedFeed && !loading">
     <h2>{{ fetchedFeed.title }}</h2>
 
-    <ul *ngFor="let item of fetchedFeed.items">
+    <ul *ngFor="let item of filteredItems">
       <p-card header="{{ item.title }}" class="feed-card">
         <p>{{ item.pubDate | date }}</p>
         <div [innerHTML]="item.content || item.description"></div>
       </p-card>
     </ul>
   </div>
+  <ng-template #noResultsTemplate>
+    <p>No results found.</p>
+  </ng-template>
 </div>

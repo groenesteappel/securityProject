@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.gfg = [
       {
-        label: 'Aggregated Feed',
+        label: 'Feed',
         routerLink: ['/aggregated-feed'],
         command: () => {
           this.applyActiveStyles();
@@ -45,13 +45,6 @@ export class AppComponent implements OnInit {
       {
         label: 'Feed Dashboard',
         routerLink: ['/feed-dashboard'],
-        command: () => {
-          this.applyActiveStyles();
-        },
-      },
-      {
-        label: 'Filtered Feed',
-        routerLink: ['/filter'],
         command: () => {
           this.applyActiveStyles();
         },

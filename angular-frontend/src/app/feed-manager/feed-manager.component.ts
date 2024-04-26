@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CardModule } from 'primeng/card';
+import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-feed-manager',
@@ -30,8 +31,15 @@ import { CardModule } from 'primeng/card';
 export class FeedManagerComponent implements OnInit {
   feedUrls: string[] = [];
   newUrl = '';
+  searchTerm: string = '';
+  fetchedFeed: any = null;
+  filteredItems: any[] = [];
+  noResultsFound: boolean | undefined;
 
-  constructor(private rssFeedService: RssFeedService) {}
+  constructor(
+    private rssFeedService: RssFeedService,
+    private searchService: SearchService
+  ) {}
 
   loading = false;
   selectedUrl: string | null = null;
@@ -67,14 +75,13 @@ export class FeedManagerComponent implements OnInit {
     });
   }
 
-  fetchedFeed: any = null;
-
   fetchFeed(url: string) {
     this.loading = true;
     this.selectedUrl = url;
     this.rssFeedService.fetchFeed(url).subscribe({
       next: (feedData) => {
         this.fetchedFeed = feedData;
+        this.filteredItems = feedData.items; // Initialize filteredItems with all items
         this.loading = false;
       },
       error: (error) => {
@@ -82,5 +89,14 @@ export class FeedManagerComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+  filterFeedItems() {
+    const { results, isEmpty } = this.searchService.filterItems(
+      this.fetchedFeed?.items || [],
+      this.searchTerm,
+      ['title', 'description', 'content']
+    );
+    this.filteredItems = results;
+    this.noResultsFound = isEmpty; // Assuming you have this property defined in your component
   }
 }

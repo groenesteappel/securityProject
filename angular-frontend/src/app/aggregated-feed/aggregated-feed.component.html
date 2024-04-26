@@ -1,16 +1,43 @@
 <!-- AggregatedFeedComponent.html -->
+<div class="m-3">
+  <div class="p-3 flex">
+    <p-floatLabel
+      ><input
+        id="search"
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="filterFeedItems()"
+      /><label for="search">search</label></p-floatLabel
+    >
+    <p-floatLabel class="ml-3">
+      <p-calendar
+        [(ngModel)]="rangeDates"
+        selectionMode="range"
+        inputId="dateRange"
+        [showIcon]="true"
+        (ngModelChange)="filterFeedItems()"
+      ></p-calendar
+      ><label for="dateRange">Publication Date</label></p-floatLabel
+    >
+  </div>
 
-<div
-  *ngIf="loading"
-  class="h-screen flex justify-content-center align-items-center"
->
-  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+  <div *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  <div *ngIf="!loading">
+    <div *ngIf="noResultsFound">
+      <p>No results found.</p>
+    </div>
+    <div *ngFor="let item of filteredItems" class="card">
+      <p-card>
+        <div class="p-card-title">{{ item.title }}</div>
+        <div class="p-card-subtitle">{{ item.pubDate | date }}</div>
+        <div
+          class="p-card-content"
+          [innerHTML]="item.content || item.description"
+        ></div>
+      </p-card>
+    </div>
+  </div>
 </div>
-<ul *ngIf="!loading">
-  <ul *ngFor="let item of aggregatedFeedItems">
-    <p-card header="{{ item.title }}" class="feed-card">
-      <p>{{ item.pubDate | date }}</p>
-      <div [innerHTML]="item.content || item.description"></div>
-    </p-card>
-  </ul>
-</ul>
