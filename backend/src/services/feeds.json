@@ -1,8 +1,32 @@
 [
-  "https://msrc.microsoft.com/blog/feed",
-  "https://advisories.ncsc.nl/rss/advisories",
-  "https://www.cisa.gov/cybersecurity-advisories/all.xml",
-  "https://oval.mitre.org/news/rss/ovalnews.feed.xml",
-  "https://www.zerodayinitiative.com/rss/upcoming/",
-  "asdasd"
+  {
+    "name": "microsoft",
+    "url": "https://msrc.microsoft.com/blog/feed",
+    "enabled": true
+  },
+  {
+    "name": "ncsc",
+    "url": "https://advisories.ncsc.nl/rss/advisories",
+    "enabled": true
+  },
+  {
+    "name": "Cisa",
+    "url": "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+    "enabled": true
+  },
+  {
+    "name": "mitre",
+    "url": "https://oval.mitre.org/news/rss/ovalnews.feed.xml",
+    "enabled": true
+  },
+  {
+    "name": "zerodayinitiavte",
+    "url": "https://www.zerodayinitiative.com/rss/upcoming/",
+    "enabled": true
+  },
+  {
+    "name": "asdasd",
+    "url": "asd",
+    "enabled": false
+  }
 ]

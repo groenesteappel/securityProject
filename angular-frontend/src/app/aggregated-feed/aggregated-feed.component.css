@@ -4,3 +4,6 @@ ul {
 :host ::ng-deep .p-card {
   margin: 1rem;
 }
+:host ::ng-deep .p-float-label {
+  display: inline;
+}

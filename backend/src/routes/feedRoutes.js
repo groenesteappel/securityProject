@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { fetchRSSFeed, addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds } = require('../services/feedService');
+const { fetchRSSFeed, addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds, toggleFeedState } = require('../services/feedService');
 
 
 
@@ -22,15 +22,31 @@ router.get('/feed', async (req, res) => {
 // Route to add a new feed URL to the subscription list
 router.post('/addUrl', async (req, res) => {
     const url = req.body.url;
+    const name = req.body.name;
     if (!url) {
         return res.status(400).json({ error: 'URL is required' });
     }
 
     try {
-        await addFeedUrl(url);
+        await addFeedUrl(name, url);
         res.status(201).json({ message: 'Feed URL added successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error adding feed URL' });
+    }
+});
+
+//Enable/disable url
+router.post('/toggleFeedState', async (req, res) => {
+    const { url, enabled } = req.body;
+    if (!url) {
+        return res.status(400).send("URL is required");
+    }
+    try {
+        await toggleFeedState(url, enabled);
+        res.send({ message: 'Feed state updated successfully.' });
+    } catch (error) {
+        console.error('Failed to toggle feed state:', error);
+        res.status(500).send('Error updating feed state.');
     }
 });
 

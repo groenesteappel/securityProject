@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AggregatedFeedComponent } from './aggregated-feed/aggregated-feed.component';
 import { FeedManagerComponent } from './feed-manager/feed-manager.component';
 import { PiholeComponentComponent } from './pihole-component/pihole-component.component';
+import { TestComponent } from './test/test.component';
 
 export const routes: Routes = [
   {
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'pihole-dashboard',
     component: PiholeComponentComponent,
+  },
+  {
+    path: 'test',
+    component: TestComponent,
   },
 ];

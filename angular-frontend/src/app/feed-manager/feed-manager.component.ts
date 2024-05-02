@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CardModule } from 'primeng/card';
 import { SearchService } from '../search.service';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
   selector: 'app-feed-manager',
@@ -26,32 +27,46 @@ import { SearchService } from '../search.service';
     InputTextModule,
     FloatLabelModule,
     CardModule,
+    InputSwitchModule,
   ],
 })
 export class FeedManagerComponent implements OnInit {
-  feedUrls: string[] = [];
+  feedUrls: { url: string; enabled: boolean }[] = [];
   newUrl = '';
   searchTerm: string = '';
   fetchedFeed: any = null;
   filteredItems: any[] = [];
   noResultsFound: boolean | undefined;
+  loading = false;
+  selectedUrl: string | null = null;
 
   constructor(
     private rssFeedService: RssFeedService,
     private searchService: SearchService
   ) {}
 
-  loading = false;
-  selectedUrl: string | null = null;
-
   ngOnInit() {
     this.loadFeedUrls();
   }
 
+  toggleFeed(url: string, newState: boolean): void {
+    const feed = this.feedUrls.find((f) => f.url === url);
+    if (feed) {
+      feed.enabled = newState; // Manually update the model here
+      this.rssFeedService.toggleFeedState(url, newState).subscribe({
+        next: () => {
+          console.log(`State updated successfully for ${url}`);
+        },
+        error: (err) => console.error(`Failed to toggle state for ${url}`, err),
+      });
+    }
+  }
+
   loadFeedUrls() {
     this.rssFeedService.listFeedUrls().subscribe({
-      next: (urls) => {
-        this.feedUrls = urls;
+      next: (feeds) => {
+        console.log('Received feeds:', feeds);
+        this.feedUrls = feeds;
       },
       error: (error) => console.error('Failed to load feed URLs', error),
     });
@@ -59,7 +74,7 @@ export class FeedManagerComponent implements OnInit {
 
   addUrl() {
     if (!this.newUrl) return;
-    this.rssFeedService.addFeedUrl(this.newUrl).subscribe({
+    this.rssFeedService.addFeedUrl('namePlaceholder', this.newUrl).subscribe({
       next: () => {
         this.loadFeedUrls(); // Reload the list after adding
         this.newUrl = ''; // Reset input

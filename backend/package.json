@@ -16,6 +16,16 @@
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.1.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "src/tests/"
+    ],
+    "exec": "node src/app.js"
   }
 }

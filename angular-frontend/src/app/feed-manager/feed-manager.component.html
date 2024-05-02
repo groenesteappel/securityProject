@@ -1,66 +1,47 @@
 <div class="p-3">
   <p-accordion>
-    <p-accordionTab header="List Of RSS Feeds">
-      <div class="">
-        <p-floatLabel
-          ><input [(ngModel)]="newUrl" pInputText /><label
-            for="Enter RSS Feed URL"
-            >Enter RSS Feed URL</label
-          >
-
-          <p-button
-            class="p-3"
-            label="Submit"
-            icon="pi pi-check"
-            (click)="addUrl()"
-          ></p-button>
-        </p-floatLabel>
-      </div>
-      <p-table [value]="feedUrls" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>URL</th>
-            <th>Action</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-url>
-          <tr [class.selected]="url === selectedUrl" (click)="fetchFeed(url)">
-            <td>{{ url }}</td>
-            <td>
-              <p-button
-                label="Remove"
-                (click)="removeUrl(url); $event.stopPropagation()"
-              >
-              </p-button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-accordionTab>
+    <div class="mb-3">
+      <p-floatLabel
+        ><input [(ngModel)]="newUrl" pInputText /><label
+          for="Enter RSS Feed URL"
+          >Enter RSS Feed URL</label
+        >
+        <p-button
+          class="p-3"
+          label="Submit"
+          icon="pi pi-check"
+          (click)="addUrl()"
+        ></p-button>
+      </p-floatLabel>
+    </div>
+    <p-table [value]="feedUrls" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>URL</th>
+          <th>Enabled</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-feed>
+        <tr>
+          <td>
+            {{ feed.url }}
+          </td>
+          <td>
+            <p-inputSwitch
+              [ngModel]="feed.enabled"
+              (onChange)="toggleFeed(feed.url, $event.checked)"
+            ></p-inputSwitch>
+          </td>
+          <td>
+            <p-button
+              label="Remove"
+              (click)="removeUrl(feed.url); $event.stopPropagation()"
+            >
+            </p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </p-accordion>
-  <input
-    type="text"
-    pInputText
-    [(ngModel)]="searchTerm"
-    (ngModelChange)="filterFeedItems()"
-    placeholder="Search Feed Items"
-  />
-  <!-- Loading Indicator -->
-  <div *ngIf="loading">
-    <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
-  </div>
-
-  <div *ngIf="fetchedFeed && !loading">
-    <h2>{{ fetchedFeed.title }}</h2>
-
-    <ul *ngFor="let item of filteredItems">
-      <p-card header="{{ item.title }}" class="feed-card">
-        <p>{{ item.pubDate | date }}</p>
-        <div [innerHTML]="item.content || item.description"></div>
-      </p-card>
-    </ul>
-  </div>
-  <ng-template #noResultsTemplate>
-    <p>No results found.</p>
-  </ng-template>
 </div>

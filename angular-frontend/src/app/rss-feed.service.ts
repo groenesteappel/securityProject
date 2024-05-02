@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,11 @@ export class RssFeedService {
     );
   }
 
-  addFeedUrl(url: string) {
+  toggleFeedState(url: string, enabled: boolean) {
+    return this.http.post(`${this.baseUrl}/toggleFeedState`, { url, enabled });
+  }
+
+  addFeedUrl(name: string, url: string) {
     return this.http.post(`${this.baseUrl}/addUrl`, { url });
   }
 
@@ -25,9 +30,15 @@ export class RssFeedService {
     });
   }
 
-  listFeedUrls() {
-    return this.http.get<string[]>(`${this.baseUrl}/listUrls`);
+  // In RssFeedService
+  listFeedUrls(): Observable<
+    { name: string; url: string; enabled: boolean }[]
+  > {
+    return this.http.get<{ name: string; url: string; enabled: boolean }[]>(
+      `${this.baseUrl}/listUrls`
+    );
   }
+
   fetchAllFeeds() {
     return this.http.get<any[]>(`${this.baseUrl}/fetchAllFeeds`);
   }
