@@ -1,74 +1,76 @@
-https://github.com/xothkug/securityProject
+# Threath analysis & DNS
 
+De repo bestaat uit 2 grote delen:
 
-pinned dashboard met interresante dingen
+- De threath analysis website gebaseerd op angular
+- De DNS server gebasseerd op pihole
 
+## Threath analysis
 
-```Dockerfile 
-FROM rockylinux:9
+### Backend
 
-# Install Node.js 16.x
-RUN dnf install -y nodejs
+De backend is een nodejs applicatie die runt op poort 3000. De backend dient vooral om de rss feeds op te slagen die je via de webinterface (zie verder) kunt toevoegen. Ook voor de lijst met rss feed content te krijgen zal hiervan gepulled worden. De volgende routes zijn beschikbaar op /api/:
 
-# Install Angular CLI globally
-RUN npm install -g @angular/cli
+- feed (get): heeft een parameter url nodig en zal vervolgens alle rss articles weergeven voor het des betreffende rss url.
+- addUrls (post): Deze api call zal een speciefieke urls toevoegen waar de feeds van gelezen worden.
+- toggleFeedState (post): Deze call zal de url aan of afzetten waar de rss feed van getrokken wordt.
+- removeUrl (delete): Verwijderd een rss feed url uit de lijst.
+- listUrls (get): Geeft de volledige lijst van rss feeds weer.
+- fetchAllFeeds (get): Geeft alle CVE-records weer van de rss feeds die in de lijst staan.
 
-# Set the working directory
-WORKDIR /usr/src/app
+### angular-frontend
 
-# Copy package.json and package-lock.json if present
-COPY package*.json ./
+Dit is de angular (v17) applicatie die 3 web pagina's heeft:
 
-# Install dependencies
-RUN npm install
+- Feed: Een lijst met alle feeds die geactiveerd zijn, op deze pagina kan je ook zaken opzoeken in de rss feed. Je kan filteren op woorden, datums en de expliciete rss feed die je wilt gebruiken.
+- Feed dashboard: Hier kan je rss feeds toevoegen waarvan je wilt dat de articles op de feed pagina komen. Je kan ook rss feeds verwijderen of deze in of uitschakelen.
+- Pi-hole dashoard: Een pagine met een beperkte weergaven van de DNS gegevens die door pi-hole gaan.
 
-# Copy the rest of the application source code
-COPY . .
+De angular frontend is bereikbaar via http://{your_ip}:4201.
 
-# Expose the port on which your Angular application will run
-EXPOSE 4200
+## DNS
 
-# Command to run the application when the container starts
-CMD ["npm", "start"]
+Onze DNS is opgebouwd uit 2 onderdelen, de pi-hole en cloudflared. Uiteindelijk wordt de dns server van quad9 gebruikt.
+
+### Pi-hole
+
+De pi-hole dient vooral om eigen DNS records toe te voegen. Ook bestaat er de mogelijkheid om DNS records te blacklisten. Het standaard wachtwoord dat ingesteld is is "changeme", dit is best te veranderen in de Dockerfile in de pi-hole folder door deze lijn te veranderen:
+
+```
+ENV WEBPASSWORD=changeme
 ```
 
-```Dockerfile
-# Use Rocky Linux as the base image
-FROM rockylinux:9
+De pi-hole draait op een ubuntu, er wordt dus geen gebruik gemaakt van de pihole docker image. We hebben dit bewust niet gedaan aangezien we op deze manier het onderliggend operating system meer up to date kunnen houden en zo dus minder kwetsbaarheden in het systeem hebben, anders zou je moeten wachten tot de maker van de pi-hole image dit updaten. Dit maakt de Dockerfile natuurlijk een stuk complexer.
 
-# Install Node.js and npm
-RUN dnf install -y nodejs npm
+Het pi-hole dashboard is bereikbaar via http://{your_ip}:8080/admin. De pi-hole zal de dan als het niks in zijn eigen records vindt de dns doorsturen naar onze cloudflared.
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+### Cloudflared
 
-# Copy package.json and package-lock.json if present
-COPY package*.json ./
+De reden waarom we cloudflared gebruiken en niet rechtstreeks naar quad9 sturen is dat pi-hole geen DNS over https verstuurt. Daarom gaan we eerst via de cloudflared en dan vervolgens naar de quad9 DNS server. We hebben gekozen voor quad9 aangezien deze dns al veel onveilige websites blokkeert. Indien gewenst kan de upstream DNS veranderd worden. Je kan dit doen door de volgende lijn te veranderen in de Dockerfile in de cloudflared folder:
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application source code
-COPY . .
-
-# Expose the port on which your Node.js application will run
-EXPOSE 3000
-
-# Command to run the application when the container starts
-CMD ["npm", "start"]
+```
+CMD ["/usr/local/bin/cloudflared", "proxy-dns", "--address", "0.0.0.0", "--port", "5053", "--upstream", "https://dns.quad9.net/dns-query", "--upstream", "https://dns9.quad9.net/dns-query"]
 ```
 
-Create image:
+Vervang hier de urls na de "--upstream" argumenten met de gewenste DNS.
+
+## docker-compose.yml
+
+Je start de beide services op met het volgende commando:
+
 ```
-docker build -t security-project-app .
+docker compose up -d
 ```
 
-Delete image:
-```
-docker rmi security-project-app
-```
+## Overzicht gebruikte poorten
 
-Run image with WSL:
-```
-docker run -it -p 172.27.52.159:4200:4200 security-project-app
-```
+- 8080 (pi-hole)
+- 53 (pi-hole)
+- 5053/udp (cloudflared)
+- 4201 (angular)
+- 49153 (angular)
+- 3000 (backend)
+
+## Standaard rss feeds
+
+MOET NOG AANGEVULD WORDEN!!!!!
