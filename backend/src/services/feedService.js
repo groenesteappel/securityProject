@@ -1,52 +1,69 @@
-const fs = require('fs').promises;
-const path = require('path');
 const Parser = require('rss-parser');
 const parser = new Parser();
-const FEEDS_FILE = path.join(__dirname, 'feeds.json');
+const connectDB = require("./db")
+
+connectDB();
+
+const mongoose = require('mongoose');
+
+const feedSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    url: { type: String, required: true, unique: true },
+    enabled: { type: Boolean, default: true }
+});
+const feedSchemaSavedSearches = new mongoose.Schema({
+    search: { type: String, required: true },
+});
+
+const Feed = mongoose.model('Feed', feedSchema);
+const savedSearchesMongoose = mongoose.model('savedsearches', feedSchemaSavedSearches);
+
 
 async function getFeedUrls() {
-    console.log(`Looking for feeds.json at: ${FEEDS_FILE}`);
     try {
-        const data = await fs.readFile(FEEDS_FILE);
-        return JSON.parse(data);
+        return await Feed.find();
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            console.error("The feeds.json file does not exist, creating with default empty array.");
-            await saveFeedUrls([]);
-            return [];
-        } else {
-            throw error;
-        }
+        console.error("Failed to fetch feeds:", error);
+        throw error;
     }
-}
-
-async function saveFeedUrls(feeds) {
-    await fs.writeFile(FEEDS_FILE, JSON.stringify(feeds, null, 2));
 }
 
 async function addFeedUrl(name, url) {
-    const feeds = await getFeedUrls();
-    const index = feeds.findIndex(f => f.url === url);
-    if (index === -1) {
-        feeds.push({ name, url, enabled: true }); // Include the feed name here
-        await saveFeedUrls(feeds);
+    try {
+        const exists = await Feed.findOne({ url: url });
+        if (!exists) {
+            const newFeed = new Feed({ name, url, enabled: true });
+            await newFeed.save();
+            console.log('Feed added successfully');
+        }
+    } catch (error) {
+        console.error("Error adding new feed:", error);
+        throw error;
     }
 }
+
 
 async function removeFeedUrl(url) {
-    let feeds = await getFeedUrls();
-    feeds = feeds.filter(feed => feed.url !== url);
-    await saveFeedUrls(feeds);
-}
-
-async function toggleFeedState(url, enabled) {
-    let feeds = await getFeedUrls();
-    const feed = feeds.find(feed => feed.url === url);
-    if (feed) {
-        feed.enabled = enabled;
-        await saveFeedUrls(feeds);
+    try {
+        await Feed.deleteOne({ url: url });
+        console.log('Feed removed successfully');
+    } catch (error) {
+        console.error("Failed to remove feed:", error);
+        throw error;
     }
 }
+
+
+async function toggleFeedState(url, enabled) {
+    try {
+        await Feed.updateOne({ url: url }, { $set: { enabled: enabled } });
+        console.log('Feed state toggled successfully');
+    } catch (error) {
+        console.error("Failed to toggle feed state:", error);
+        throw error;
+    }
+}
+
 
 const aggregateAndSortFeeds = async () => {
     const feeds = await getFeedUrls();
@@ -72,10 +89,21 @@ const aggregateAndSortFeeds = async () => {
     return allFeedItems;
 };
 
+
+async function getSavedSearches() {
+    try {
+        return await savedSearchesMongoose.find();
+    } catch (error) {
+        console.error("Failed to fetch feeds:", error);
+        throw error;
+    }
+}
+
 module.exports = {
     addFeedUrl,
     removeFeedUrl,
     getFeedUrls,
     toggleFeedState,
     aggregateAndSortFeeds,
+    getSavedSearches,
 };

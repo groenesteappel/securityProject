@@ -21,7 +21,7 @@ export class RssFeedService {
   }
 
   addFeedUrl(name: string, url: string) {
-    return this.http.post(`${this.baseUrl}/addUrl`, { url });
+    return this.http.post(`${this.baseUrl}/addUrl`, { name, url });
   }
 
   removeFeedUrl(url: string) {

@@ -32,6 +32,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 })
 export class FeedManagerComponent implements OnInit {
   feedUrls: { url: string; enabled: boolean }[] = [];
+  newName = '';
   newUrl = '';
   searchTerm: string = '';
   fetchedFeed: any = null;
@@ -73,8 +74,8 @@ export class FeedManagerComponent implements OnInit {
   }
 
   addUrl() {
-    if (!this.newUrl) return;
-    this.rssFeedService.addFeedUrl('namePlaceholder', this.newUrl).subscribe({
+    if (!this.newUrl || !this.newName) return;
+    this.rssFeedService.addFeedUrl(this.newName, this.newUrl).subscribe({
       next: () => {
         this.loadFeedUrls(); // Reload the list after adding
         this.newUrl = ''; // Reset input

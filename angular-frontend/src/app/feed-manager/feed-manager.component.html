@@ -1,47 +1,51 @@
 <div class="p-3">
-  <p-accordion>
-    <div class="mb-3">
-      <p-floatLabel
-        ><input [(ngModel)]="newUrl" pInputText /><label
-          for="Enter RSS Feed URL"
-          >Enter RSS Feed URL</label
-        >
-        <p-button
-          class="p-3"
-          label="Submit"
-          icon="pi pi-check"
-          (click)="addUrl()"
-        ></p-button>
-      </p-floatLabel>
+  <div class="flex gap-2 p-3 align-items-end">
+    <div class="flex flex-column gap-2">
+      <label for="name">Enter RSS Feed Name</label>
+      <input [(ngModel)]="newName" pInputText id="name" />
     </div>
-    <p-table [value]="feedUrls" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>URL</th>
-          <th>Enabled</th>
-          <th>Action</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-feed>
-        <tr>
-          <td>
-            {{ feed.url }}
-          </td>
-          <td>
-            <p-inputSwitch
-              [ngModel]="feed.enabled"
-              (onChange)="toggleFeed(feed.url, $event.checked)"
-            ></p-inputSwitch>
-          </td>
-          <td>
-            <p-button
-              label="Remove"
-              (click)="removeUrl(feed.url); $event.stopPropagation()"
-            >
-            </p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-accordion>
+    <div class="flex flex-column gap-2">
+      <label for="url">Enter RSS Feed URL</label>
+      <input [(ngModel)]="newUrl" pInputText id="url" />
+    </div>
+    <p-button
+      class=""
+      label="Submit"
+      icon="pi pi-check"
+      (click)="addUrl()"
+    ></p-button>
+  </div>
+  <p-table [value]="feedUrls" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>URL</th>
+        <th>Enabled</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-feed>
+      <tr>
+        <td>
+          {{ feed.name }}
+        </td>
+        <td>
+          {{ feed.url }}
+        </td>
+        <td>
+          <p-inputSwitch
+            [ngModel]="feed.enabled"
+            (onChange)="toggleFeed(feed.url, $event.checked)"
+          ></p-inputSwitch>
+        </td>
+        <td>
+          <p-button
+            label="Remove"
+            (click)="removeUrl(feed.url); $event.stopPropagation()"
+          >
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

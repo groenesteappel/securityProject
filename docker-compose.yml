@@ -47,6 +47,21 @@ services:
       - "3000:3000"
     networks:
       - default
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - ./mongodb/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rootuser
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017"
+    networks:
+      - default
+    restart: unless-stopped
 
 networks:
   default:
+
+volumes:
+  mongodb_data:

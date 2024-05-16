@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { fetchRSSFeed, addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds, toggleFeedState } = require('../services/feedService');
+const { addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds, toggleFeedState, getSavedSearches } = require('../services/feedService');
 
 
 
@@ -82,5 +82,51 @@ router.get('/fetchAllFeeds', async (req, res) => {
         res.status(500).send('Failed to aggregate feeds');
     }
 });
+
+
+//savedSearches
+router.get('/savedsearches', async (req, res) => {
+
+    try {
+        const savedSearches = await getSavedSearches();
+        res.json(savedSearches);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch saved searches" });
+    }
+});
+
+// Route to add a saved search
+router.post('/savedSearches', async (req, res) => {
+    const { search_query, rss_feed_url } = req.body;
+
+    if (!search_query || !rss_feed_url) {
+        return res.status(400).send("Search query and RSS feed URL are required");
+    }
+
+    try {
+        await addSavedSearch(search_query, rss_feed_url);
+        res.status(201).json({ message: 'Saved search added successfully.' });
+    } catch (error) {
+        console.error('Failed to add saved search:', error);
+        res.status(500).send('Error adding saved search.');
+    }
+});
+
+// Route to remove a saved search
+router.delete('/savedSearches', async (req, res) => {
+    const { search_query } = req.body;
+
+    if (!search_query) {
+        return res.status(400).json({ error: 'Search query is required' });
+    }
+
+    try {
+        await removeSavedSearch(search_query);
+        res.json({ message: 'Saved search removed successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error removing saved search' });
+    }
+});
+
 
 module.exports = router;
