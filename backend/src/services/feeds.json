@@ -25,8 +25,7 @@
     "enabled": true
   },
   {
-    "name": "asdasd",
-    "url": "asd",
-    "enabled": false
+    "url": "https://www.tenable.com/cve/feeds?sort=updated",
+    "enabled": true
   }
 ]
