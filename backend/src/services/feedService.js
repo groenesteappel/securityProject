@@ -1,6 +1,6 @@
 const Parser = require('rss-parser');
 const parser = new Parser();
-const connectDB = require("./db")
+const connectDB = require("./db");
 
 connectDB();
 
@@ -11,13 +11,13 @@ const feedSchema = new mongoose.Schema({
     url: { type: String, required: true, unique: true },
     enabled: { type: Boolean, default: true }
 });
+
 const feedSchemaSavedSearches = new mongoose.Schema({
     search: { type: String, required: true },
 });
 
 const Feed = mongoose.model('Feed', feedSchema);
-const savedSearchesMongoose = mongoose.model('savedsearches', feedSchemaSavedSearches);
-
+const SavedSearch = mongoose.model('savedsearches', feedSchemaSavedSearches);
 
 async function getFeedUrls() {
     try {
@@ -42,7 +42,6 @@ async function addFeedUrl(name, url) {
     }
 }
 
-
 async function removeFeedUrl(url) {
     try {
         await Feed.deleteOne({ url: url });
@@ -52,7 +51,6 @@ async function removeFeedUrl(url) {
         throw error;
     }
 }
-
 
 async function toggleFeedState(url, enabled) {
     try {
@@ -64,7 +62,6 @@ async function toggleFeedState(url, enabled) {
     }
 }
 
-
 const aggregateAndSortFeeds = async () => {
     const feeds = await getFeedUrls();
     let allFeedItems = [];
@@ -74,31 +71,58 @@ const aggregateAndSortFeeds = async () => {
             const fetchedFeed = await parser.parseURL(feed.url);
             const itemsWithMetadata = fetchedFeed.items.map(item => ({
                 ...item,
-                feedTitle: fetchedFeed.title, // This is the title from the feed itself
-                feedName: feed.name, // Include the name property for filtering
-                feedUrl: feed.url, // Include the url property for filtering
+                feedTitle: fetchedFeed.title,
+                feedName: feed.name,
+                feedUrl: feed.url,
             }));
             allFeedItems = allFeedItems.concat(itemsWithMetadata);
         } catch (error) {
-            console.error(`Error fetching feed from ${feed.url}:`, error);
+            if (error.code === 'ECONNREFUSED') {
+                console.error(`Error fetching feed from ${feed.url}: Connection refused`);
+            } else {
+                console.error(`Error fetching feed from ${feed.url}:`, error);
+            }
         }
     }
 
-    // Sort by publication date
     allFeedItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
     return allFeedItems;
 };
 
-
 async function getSavedSearches() {
     try {
-        return await savedSearchesMongoose.find();
+        return await SavedSearch.find();
     } catch (error) {
-        console.error("Failed to fetch feeds:", error);
+        console.error("Failed to fetch saved searches:", error);
         throw error;
     }
 }
 
+async function addSavedSearch(searchTerm) {
+    try {
+        console.log('Attempting to add search term:', searchTerm);
+        const exists = await SavedSearch.findOne({ search: searchTerm });
+        if (!exists) {
+            const newSearch = new SavedSearch({ search: searchTerm });
+            await newSearch.save();
+            console.log('Search term added successfully');
+        } else {
+            console.log('Search term already exists');
+        }
+    } catch (error) {
+        console.error("Error adding new search term:", error);
+        throw error;
+    }
+}
+async function removeSavedSearch(searchTerm) {
+    try {
+        await SavedSearch.deleteOne({ search: searchTerm });
+        console.log('Saved search removed successfully');
+    } catch (error) {
+        console.error("Error removing saved search:", error);
+        throw error;
+    }
+}
 module.exports = {
     addFeedUrl,
     removeFeedUrl,
@@ -106,4 +130,6 @@ module.exports = {
     toggleFeedState,
     aggregateAndSortFeeds,
     getSavedSearches,
+    addSavedSearch,
+    removeSavedSearch,
 };

@@ -1,4 +1,3 @@
-// aggregated-feed.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RssFeedService } from '../rss-feed.service';
 import { SearchService } from '../search.service';
@@ -20,6 +19,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-aggregated-feed',
@@ -43,6 +44,7 @@ import { ToolbarModule } from 'primeng/toolbar';
     InputGroupAddonModule,
     IconFieldModule,
     InputIconModule,
+    ContextMenuModule,
   ],
   templateUrl: './aggregated-feed.component.html',
   styleUrls: ['./aggregated-feed.component.css'],
@@ -63,6 +65,7 @@ export class AggregatedFeedComponent implements OnInit {
   ];
   activeSearchTerms: Set<string> = new Set();
   selectedSavedSearchTerms: string[] = [];
+  items: MenuItem[] | undefined;
 
   constructor(
     private rssFeedService: RssFeedService,
@@ -70,14 +73,17 @@ export class AggregatedFeedComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('ngOnInit called');
     this.loadAggregatedFeed();
     this.loadFeedUrls();
     this.loadSavedSearches();
   }
 
   loadFeedUrls() {
+    console.log('loadFeedUrls called');
     this.rssFeedService.listFeedUrls().subscribe({
       next: (feeds) => {
+        console.log('Feeds loaded:', feeds);
         this.feedUrls = feeds;
         this.multiSelectOptions = feeds
           .filter((feed) => feed.enabled)
@@ -93,9 +99,11 @@ export class AggregatedFeedComponent implements OnInit {
   }
 
   loadAggregatedFeed() {
+    console.log('loadAggregatedFeed called');
     this.isLoading = true;
     this.rssFeedService.fetchAllFeeds().subscribe({
       next: (items) => {
+        console.log('Aggregated feed items loaded:', items);
         this.aggregatedFeedItems = items;
         this.filteredFeedItems = items;
         this.isLoading = false;
@@ -107,24 +115,87 @@ export class AggregatedFeedComponent implements OnInit {
     });
   }
 
-  loadSavedSearches() {
-    console.log('loadSavedSearches: Loading saved searches');
+  loadSavedSearches(clearSearchTerm: boolean = false) {
+    console.log('loadSavedSearches called');
     this.rssFeedService.fetchSavedSearches().subscribe({
       next: (savedSearches) => {
-        console.log('loadSavedSearches: Saved searches loaded', savedSearches);
+        console.log('Saved searches loaded:', savedSearches);
         this.savedSearchOptions = savedSearches;
+        if (clearSearchTerm) {
+          this.clearSearch(); // Clear search terms and active terms
+        } else {
+          this.updateSearchTerm(); // Refresh the state
+        }
       },
       error: (error) => {
-        console.error(
-          'loadSavedSearches: Failed to load saved searches',
-          error
-        );
+        console.error('Failed to load saved searches', error);
+      },
+    });
+  }
+
+  saveSearch() {
+    console.log('saveSearch called with searchTerm:', this.searchTerm);
+    if (this.searchTerm.trim() !== '') {
+      if (!this.isSavedSearch()) {
+        console.log('Saving search term:', this.searchTerm.trim());
+        this.rssFeedService.saveSearchTerm(this.searchTerm.trim()).subscribe({
+          next: () => {
+            console.log('Search term saved successfully');
+            this.loadSavedSearches(); // Refresh saved searches
+          },
+          error: (error) => {
+            console.error('Failed to save search term', error);
+          },
+        });
+      } else {
+        console.log('Deleting search term:', this.searchTerm.trim());
+        this.deleteSearch(this.searchTerm.trim(), true); // Clear the search term
+      }
+    }
+  }
+
+  clearSearch() {
+    console.log('clearSearch called');
+    this.searchTerm = '';
+    this.activeSearchTerms.clear();
+    this.selectedSavedSearchTerms = []; // Clear selected saved search terms
+    this.filterFeedItems(); // Reapply filters
+  }
+
+  public isSavedSearch(): boolean {
+    const isSaved = this.savedSearchOptions.some(
+      (option) => option.value === this.searchTerm.trim()
+    );
+    console.log('isSavedSearch:', isSaved);
+    return isSaved;
+  }
+
+  deleteSearch(searchTerm: string, clearSearchTerm: boolean = false) {
+    console.log(
+      'deleteSearch called with searchTerm:',
+      searchTerm,
+      'clearSearchTerm:',
+      clearSearchTerm
+    );
+    this.rssFeedService.deleteSearchTerm(searchTerm).subscribe({
+      next: () => {
+        console.log('Search term deleted successfully');
+        this.loadSavedSearches(clearSearchTerm); // Refresh saved searches and optionally clear search term
+      },
+      error: (error) => {
+        console.error('Failed to delete search term', error);
       },
     });
   }
 
   toggleFeedState(feedItem: any): void {
     const newState = !feedItem.enabled;
+    console.log(
+      'toggleFeedState called with feedItem:',
+      feedItem,
+      'newState:',
+      newState
+    );
     this.rssFeedService.toggleFeedState(feedItem.url, newState).subscribe({
       next: () => {
         feedItem.enabled = newState;
@@ -139,14 +210,27 @@ export class AggregatedFeedComponent implements OnInit {
   }
 
   updateSelectedUrls(selectedOptions: any[]): void {
+    console.log(
+      'updateSelectedUrls called with selectedOptions:',
+      selectedOptions
+    );
     this.selectedFeedUrls = selectedOptions.map((option) => option.value);
     this.filterFeedItems();
   }
 
   filterFeedItems() {
+    console.log('filterFeedItems called');
     const startDate = this.dateRange?.[0] || null;
     const endDate = this.dateRange?.[1] || null;
     const searchString = this.getSearchString();
+    console.log(
+      'Filtering with searchString:',
+      searchString,
+      'startDate:',
+      startDate,
+      'endDate:',
+      endDate
+    );
 
     let results = this.searchService.filterItems(
       this.aggregatedFeedItems,
@@ -167,36 +251,43 @@ export class AggregatedFeedComponent implements OnInit {
   }
 
   applySavedSearchTerms() {
+    console.log('applySavedSearchTerms called');
     this.activeSearchTerms.clear();
     this.selectedSavedSearchTerms.forEach((term) => {
       this.activeSearchTerms.add(term);
     });
-    this.updateSearchTerm();
+    this.updateSearchTerm(); // Sync `searchTerm` with `activeSearchTerms`
     this.filterFeedItems();
   }
 
   updateSearchTerm() {
+    console.log('updateSearchTerm called');
     this.searchTerm = Array.from(this.activeSearchTerms).join(', ');
+    console.log('Updated searchTerm:', this.searchTerm);
     this.filterFeedItems();
   }
 
   onSearchTermChange() {
+    console.log('onSearchTermChange called with searchTerm:', this.searchTerm);
     const terms = this.searchTerm
       .toLowerCase()
       .split(',')
       .map((term) => term.trim());
+
     this.activeSearchTerms.clear();
     terms.forEach((term) => {
       if (term) {
         this.activeSearchTerms.add(term);
       }
     });
+
     this.selectedSavedSearchTerms = Array.from(this.activeSearchTerms); // Sync the selectButton model
     this.filterFeedItems();
   }
 
   private getSearchString(): string {
     const activeTerms = Array.from(this.activeSearchTerms).join(', ');
-    return this.searchTerm ? `${this.searchTerm}, ${activeTerms}` : activeTerms;
+    console.log('getSearchString called, activeTerms:', activeTerms);
+    return activeTerms; // Return only active terms without appending searchTerm
   }
 }

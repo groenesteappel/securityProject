@@ -54,11 +54,22 @@ export class RssFeedService {
           console.log('fetchSavedSearches: Original data', savedSearches);
           return savedSearches.map(
             (search: { _id: string; search: string }) => ({
-              label: search.search, // Using 'search' as label
-              value: search.search, // Using 'search' as value
+              label: search.search,
+              value: search.search,
             })
           );
         })
       );
+  }
+
+  saveSearchTerm(searchTerm: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/savedsearches`, {
+      search: searchTerm,
+    });
+  }
+  deleteSearchTerm(searchTerm: string): Observable<any> {
+    return this.http.request<any>('delete', `${this.baseUrl}/savedsearches`, {
+      body: { search: searchTerm },
+    });
   }
 }

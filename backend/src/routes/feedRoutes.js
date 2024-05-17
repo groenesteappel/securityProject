@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds, toggleFeedState, getSavedSearches } = require('../services/feedService');
-
+const { addFeedUrl, removeFeedUrl, getFeedUrls, aggregateAndSortFeeds, toggleFeedState, getSavedSearches, addSavedSearch, removeSavedSearch } = require('../services/feedService');
 
 
 router.get('/feed', async (req, res) => {
@@ -35,7 +34,7 @@ router.post('/addUrl', async (req, res) => {
     }
 });
 
-//Enable/disable url
+// Enable/disable URL
 router.post('/toggleFeedState', async (req, res) => {
     const { url, enabled } = req.body;
     if (!url) {
@@ -74,6 +73,7 @@ router.get('/listUrls', async (req, res) => {
         res.status(500).json({ error: 'Error listing feed URLs' });
     }
 });
+
 router.get('/fetchAllFeeds', async (req, res) => {
     try {
         const aggregatedFeeds = await aggregateAndSortFeeds();
@@ -83,10 +83,8 @@ router.get('/fetchAllFeeds', async (req, res) => {
     }
 });
 
-
-//savedSearches
+// Saved Searches
 router.get('/savedsearches', async (req, res) => {
-
     try {
         const savedSearches = await getSavedSearches();
         res.json(savedSearches);
@@ -95,38 +93,31 @@ router.get('/savedsearches', async (req, res) => {
     }
 });
 
-// Route to add a saved search
-router.post('/savedSearches', async (req, res) => {
-    const { search_query, rss_feed_url } = req.body;
-
-    if (!search_query || !rss_feed_url) {
-        return res.status(400).send("Search query and RSS feed URL are required");
-    }
-
+router.post('/savedsearches', async (req, res) => {
+    const { search } = req.body;
     try {
-        await addSavedSearch(search_query, rss_feed_url);
-        res.status(201).json({ message: 'Saved search added successfully.' });
+        console.log('Request received to save search:', search);
+        await addSavedSearch(search);
+        res.status(200).send({ message: 'Search term added successfully' });
     } catch (error) {
-        console.error('Failed to add saved search:', error);
-        res.status(500).send('Error adding saved search.');
+        console.error('Failed to add search term:', error);
+        res.status(500).send({ error: 'Failed to add search term' });
     }
 });
 
-// Route to remove a saved search
-router.delete('/savedSearches', async (req, res) => {
-    const { search_query } = req.body;
-
-    if (!search_query) {
-        return res.status(400).json({ error: 'Search query is required' });
+router.delete('/savedsearches', async (req, res) => {
+    const { search } = req.body;
+    console.log("asdasd " + search);
+    if (!search) {
+        return res.status(400).json({ error: 'Search query is required as' });
     }
 
     try {
-        await removeSavedSearch(search_query);
+        await removeSavedSearch(search);
         res.json({ message: 'Saved search removed successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error removing saved search' });
     }
 });
-
 
 module.exports = router;

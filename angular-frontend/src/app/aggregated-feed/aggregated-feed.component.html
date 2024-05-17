@@ -12,7 +12,13 @@
             [(ngModel)]="searchTerm"
             (ngModelChange)="onSearchTermChange()"
           /><p-inputGroupAddon>
-            <i class="pi pi-bookmark"></i>
+            <i
+              class="pi"
+              [ngClass]="isSavedSearch() ? 'pi-bookmark-fill' : 'pi-bookmark'"
+              style="cursor: pointer"
+              (click)="saveSearch()"
+            >
+            </i>
           </p-inputGroupAddon>
         </p-inputGroup>
 
@@ -49,7 +55,6 @@
       (onChange)="applySavedSearchTerms()"
     ></p-selectButton>
   </div>
-
   <div class="mt-3" *ngIf="isLoading">
     <p-progressSpinner></p-progressSpinner>
   </div>
