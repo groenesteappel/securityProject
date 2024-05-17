@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { RssFeedService } from '../rss-feed.service';
 import { SearchService } from '../search.service';
 import { FormsModule } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -15,12 +14,20 @@ import { MenubarModule } from 'primeng/menubar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { PanelModule } from 'primeng/panel';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @Component({
   selector: 'app-aggregated-feed',
   standalone: true,
   imports: [
     CommonModule,
+    ToolbarModule,
+    PanelModule,
     CardModule,
     ProgressSpinnerModule,
     FormsModule,
@@ -32,6 +39,10 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     MultiSelectModule,
     DropdownModule,
     SelectButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    IconFieldModule,
+    InputIconModule,
   ],
   templateUrl: './aggregated-feed.component.html',
   styleUrls: ['./aggregated-feed.component.css'],
@@ -61,6 +72,7 @@ export class AggregatedFeedComponent implements OnInit {
   ngOnInit() {
     this.loadAggregatedFeed();
     this.loadFeedUrls();
+    this.loadSavedSearches();
   }
 
   loadFeedUrls() {
@@ -91,6 +103,22 @@ export class AggregatedFeedComponent implements OnInit {
       error: (error) => {
         console.error('Failed to load aggregated feed', error);
         this.isLoading = false;
+      },
+    });
+  }
+
+  loadSavedSearches() {
+    console.log('loadSavedSearches: Loading saved searches');
+    this.rssFeedService.fetchSavedSearches().subscribe({
+      next: (savedSearches) => {
+        console.log('loadSavedSearches: Saved searches loaded', savedSearches);
+        this.savedSearchOptions = savedSearches;
+      },
+      error: (error) => {
+        console.error(
+          'loadSavedSearches: Failed to load saved searches',
+          error
+        );
       },
     });
   }

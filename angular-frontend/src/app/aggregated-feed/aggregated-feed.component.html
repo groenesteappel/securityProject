@@ -1,10 +1,9 @@
 <!-- AggregatedFeedComponent.html -->
 <div class="m-3">
   <div>
-    <p-menubar>
-      <ng-template pTemplate="start">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
+    <p-toolbar>
+      <div class="p-toolbar-group-start">
+        <p-inputGroup>
           <input
             id="search"
             type="text"
@@ -12,8 +11,11 @@
             pInputText
             [(ngModel)]="searchTerm"
             (ngModelChange)="onSearchTermChange()"
-          />
-        </span>
+          /><p-inputGroupAddon>
+            <i class="pi pi-bookmark"></i>
+          </p-inputGroupAddon>
+        </p-inputGroup>
+
         <p-calendar
           class="ml-3"
           [(ngModel)]="dateRange"
@@ -32,8 +34,8 @@
           optionValue="value"
           (onChange)="filterFeedItems()"
         ></p-multiSelect>
-      </ng-template>
-    </p-menubar>
+      </div>
+    </p-toolbar>
   </div>
 
   <div class="mt-3">

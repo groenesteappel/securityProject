@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,27 +11,29 @@ export class RssFeedService {
 
   constructor(private http: HttpClient) {}
 
-  fetchFeed(url: string) {
+  fetchFeed(url: string): Observable<any> {
     return this.http.get<any>(
       `${this.baseUrl}/feed?url=${encodeURIComponent(url)}`
     );
   }
 
-  toggleFeedState(url: string, enabled: boolean) {
-    return this.http.post(`${this.baseUrl}/toggleFeedState`, { url, enabled });
+  toggleFeedState(url: string, enabled: boolean): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/toggleFeedState`, {
+      url,
+      enabled,
+    });
   }
 
-  addFeedUrl(name: string, url: string) {
-    return this.http.post(`${this.baseUrl}/addUrl`, { name, url });
+  addFeedUrl(name: string, url: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/addUrl`, { name, url });
   }
 
-  removeFeedUrl(url: string) {
-    return this.http.request('delete', `${this.baseUrl}/removeUrl`, {
+  removeFeedUrl(url: string): Observable<any> {
+    return this.http.request<any>('delete', `${this.baseUrl}/removeUrl`, {
       body: { url },
     });
   }
 
-  // In RssFeedService
   listFeedUrls(): Observable<
     { name: string; url: string; enabled: boolean }[]
   > {
@@ -39,7 +42,23 @@ export class RssFeedService {
     );
   }
 
-  fetchAllFeeds() {
+  fetchAllFeeds(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/fetchAllFeeds`);
+  }
+
+  fetchSavedSearches(): Observable<{ label: string; value: string }[]> {
+    return this.http
+      .get<{ _id: string; search: string }[]>(`${this.baseUrl}/savedsearches`)
+      .pipe(
+        map((savedSearches: { _id: string; search: string }[]) => {
+          console.log('fetchSavedSearches: Original data', savedSearches);
+          return savedSearches.map(
+            (search: { _id: string; search: string }) => ({
+              label: search.search, // Using 'search' as label
+              value: search.search, // Using 'search' as value
+            })
+          );
+        })
+      );
   }
 }
