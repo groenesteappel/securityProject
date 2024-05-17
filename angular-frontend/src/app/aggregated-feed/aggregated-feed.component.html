@@ -4,42 +4,55 @@
     <p-menubar>
       <ng-template pTemplate="start">
         <span class="p-input-icon-left">
-          <i class="pi pi-search"></i
-          ><input
+          <i class="pi pi-search"></i>
+          <input
             id="search"
             type="text"
-            placeholder="search"
+            placeholder="Search"
             pInputText
             [(ngModel)]="searchTerm"
-            (ngModelChange)="filterFeedItems()"
-        /></span>
-
+            (ngModelChange)="onSearchTermChange()"
+          />
+        </span>
         <p-calendar
           class="ml-3"
-          [(ngModel)]="rangeDates"
+          [(ngModel)]="dateRange"
           selectionMode="range"
           placeholder="Dates"
           inputId="dateRange"
           [showIcon]="true"
           (ngModelChange)="filterFeedItems()"
-        ></p-calendar
-        ><p-multiSelect
+        ></p-calendar>
+        <p-multiSelect
           class="ml-3"
           [options]="multiSelectOptions"
-          [(ngModel)]="selectedUrls"
+          [(ngModel)]="selectedFeedUrls"
           placeholder="Select Feeds"
           optionLabel="label"
           optionValue="value"
           (onChange)="filterFeedItems()"
-        ></p-multiSelect> </ng-template
-    ></p-menubar>
+        ></p-multiSelect>
+      </ng-template>
+    </p-menubar>
   </div>
 
-  <div class="mt-3" *ngIf="loading">
+  <div class="mt-3">
+    <p>Saved Searches:</p>
+    <p-selectButton
+      [options]="savedSearchOptions"
+      [(ngModel)]="selectedSavedSearchTerms"
+      [multiple]="true"
+      optionLabel="label"
+      optionValue="value"
+      (onChange)="applySavedSearchTerms()"
+    ></p-selectButton>
+  </div>
+
+  <div class="mt-3" *ngIf="isLoading">
     <p-progressSpinner></p-progressSpinner>
   </div>
-  <div *ngIf="!loading">
-    <div *ngFor="let item of filteredItems" class="card">
+  <div *ngIf="!isLoading">
+    <div *ngFor="let item of filteredFeedItems" class="card">
       <p-card>
         <div class="p-card-title">{{ item.title }}, {{ item.name }}</div>
         <div class="p-card-subtitle">{{ item.pubDate | date }}</div>

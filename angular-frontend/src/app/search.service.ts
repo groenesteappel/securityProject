@@ -1,3 +1,4 @@
+// search.service.ts
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -17,12 +18,13 @@ export class SearchService {
 
     // Text search
     if (searchTerm) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const terms = searchTerm
+        .toLowerCase()
+        .split(',')
+        .map((term) => term.trim());
       filtered = filtered.filter((item) =>
-        fields.some(
-          (field) =>
-            item[field] &&
-            item[field].toLowerCase().includes(lowerCaseSearchTerm)
+        fields.some((field) =>
+          terms.some((term) => item[field]?.toLowerCase().includes(term))
         )
       );
     }

@@ -1,18 +1,20 @@
+// aggregated-feed.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RssFeedService } from '../rss-feed.service';
+import { SearchService } from '../search.service';
+import { FormsModule } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { SearchService } from '../search.service';
-import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
-import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-aggregated-feed',
@@ -29,21 +31,27 @@ import { MultiSelectModule } from 'primeng/multiselect';
     MenubarModule,
     MultiSelectModule,
     DropdownModule,
+    SelectButtonModule,
   ],
   templateUrl: './aggregated-feed.component.html',
-  styleUrls: ['./aggregated-feed.component.css'], // Corrected here
+  styleUrls: ['./aggregated-feed.component.css'],
 })
 export class AggregatedFeedComponent implements OnInit {
   aggregatedFeedItems: any[] = [];
-  filteredItems: any[] = [];
+  filteredFeedItems: any[] = [];
   searchTerm: string = '';
-  loading: boolean = false;
-  rangeDates: Date[] | null = null;
-  noResultsFound: boolean = false;
+  isLoading: boolean = false;
+  dateRange: Date[] | null = null;
+  noResults: boolean = false;
   feedUrls: { name: string; url: string; enabled: boolean }[] = [];
-  items: MenuItem[] | undefined;
-  selectedUrls: { name: string; url: string }[] = [];
+  selectedFeedUrls: { name: string; url: string }[] = [];
   multiSelectOptions: any[] = [];
+  savedSearchOptions: { label: string; value: string }[] = [
+    { label: 'debian', value: 'debian' },
+    { label: 'microsoft sql', value: 'microsoft sql' },
+  ];
+  activeSearchTerms: Set<string> = new Set();
+  selectedSavedSearchTerms: string[] = [];
 
   constructor(
     private rssFeedService: RssFeedService,
@@ -59,12 +67,11 @@ export class AggregatedFeedComponent implements OnInit {
     this.rssFeedService.listFeedUrls().subscribe({
       next: (feeds) => {
         this.feedUrls = feeds;
-        // Filter to include only enabled feeds before mapping to multiSelectOptions
         this.multiSelectOptions = feeds
           .filter((feed) => feed.enabled)
           .map((feed) => ({
-            label: feed.name, // The display name for the dropdown
-            value: feed.url, // The URL, which is used for filtering
+            label: feed.name,
+            value: feed.url,
           }));
       },
       error: (error) => {
@@ -74,16 +81,16 @@ export class AggregatedFeedComponent implements OnInit {
   }
 
   loadAggregatedFeed() {
-    this.loading = true;
+    this.isLoading = true;
     this.rssFeedService.fetchAllFeeds().subscribe({
       next: (items) => {
-        this.aggregatedFeedItems = items; // Assumes items now have a 'feedName' or 'feedUrl'
-        this.filteredItems = items;
-        this.loading = false;
+        this.aggregatedFeedItems = items;
+        this.filteredFeedItems = items;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Failed to load aggregated feed', error);
-        this.loading = false;
+        this.isLoading = false;
       },
     });
   }
@@ -92,47 +99,76 @@ export class AggregatedFeedComponent implements OnInit {
     const newState = !feedItem.enabled;
     this.rssFeedService.toggleFeedState(feedItem.url, newState).subscribe({
       next: () => {
-        feedItem.enabled = newState; // Update the state on the client side after confirmation from the server
+        feedItem.enabled = newState;
         console.log(`Feed state updated for ${feedItem.url}`);
         this.loadAggregatedFeed();
       },
       error: (err) => {
         console.error(`Failed to toggle feed state for ${feedItem.url}`, err);
-        // Optionally reset the switch if the server fails to toggle the state
         feedItem.enabled = !newState;
       },
     });
   }
 
   updateSelectedUrls(selectedOptions: any[]): void {
-    this.selectedUrls = selectedOptions.map((option) => option.value);
-    this.filterFeedItems(); // Reapply filters
+    this.selectedFeedUrls = selectedOptions.map((option) => option.value);
+    this.filterFeedItems();
   }
 
   filterFeedItems() {
-    console.log('Starting filter operation...');
-
-    const startDate =
-      this.rangeDates && this.rangeDates.length > 0 ? this.rangeDates[0] : null;
-    const endDate =
-      this.rangeDates && this.rangeDates.length > 1 ? this.rangeDates[1] : null;
+    const startDate = this.dateRange?.[0] || null;
+    const endDate = this.dateRange?.[1] || null;
+    const searchString = this.getSearchString();
 
     let results = this.searchService.filterItems(
       this.aggregatedFeedItems,
-      this.searchTerm,
+      searchString,
       ['title', 'description', 'content'],
       startDate,
       endDate
     ).results;
 
-    if (this.selectedUrls && this.selectedUrls.length) {
-      console.log('Selected URLs for filtering:', this.selectedUrls);
+    if (this.selectedFeedUrls.length) {
       results = results.filter((item) =>
-        this.selectedUrls.includes(item.feedUrl)
+        this.selectedFeedUrls.includes(item.feedUrl)
       );
     }
 
-    this.filteredItems = results;
-    this.noResultsFound = results.length === 0 && !this.loading;
+    this.filteredFeedItems = Array.from(new Set(results)); // Remove duplicates
+    this.noResults = results.length === 0 && !this.isLoading;
+  }
+
+  applySavedSearchTerms() {
+    this.activeSearchTerms.clear();
+    this.selectedSavedSearchTerms.forEach((term) => {
+      this.activeSearchTerms.add(term);
+    });
+    this.updateSearchTerm();
+    this.filterFeedItems();
+  }
+
+  updateSearchTerm() {
+    this.searchTerm = Array.from(this.activeSearchTerms).join(', ');
+    this.filterFeedItems();
+  }
+
+  onSearchTermChange() {
+    const terms = this.searchTerm
+      .toLowerCase()
+      .split(',')
+      .map((term) => term.trim());
+    this.activeSearchTerms.clear();
+    terms.forEach((term) => {
+      if (term) {
+        this.activeSearchTerms.add(term);
+      }
+    });
+    this.selectedSavedSearchTerms = Array.from(this.activeSearchTerms); // Sync the selectButton model
+    this.filterFeedItems();
+  }
+
+  private getSearchString(): string {
+    const activeTerms = Array.from(this.activeSearchTerms).join(', ');
+    return this.searchTerm ? `${this.searchTerm}, ${activeTerms}` : activeTerms;
   }
 }
