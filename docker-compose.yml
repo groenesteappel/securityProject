@@ -48,7 +48,7 @@ services:
     networks:
       - default
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4
     volumes:
       - ./mongodb/data:/data/db
     environment:
