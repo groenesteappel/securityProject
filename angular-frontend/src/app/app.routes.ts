@@ -17,8 +17,4 @@ export const routes: Routes = [
     path: 'pihole-dashboard',
     component: PiholeComponentComponent,
   },
-  {
-    path: 'test',
-    component: TestComponent,
-  },
 ];

@@ -56,13 +56,6 @@ export class AppComponent implements OnInit {
           this.applyActiveStyles();
         },
       },
-      {
-        label: 'test',
-        routerLink: ['/test'],
-        command: () => {
-          this.applyActiveStyles();
-        },
-      },
     ];
     this.applyActiveStyles();
   }
