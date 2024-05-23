@@ -7,6 +7,19 @@ De repo bestaat uit 2 grote delen:
 
 ## Threath analysis
 
+## Table of Contents
+
+- [Backend](#backend)
+- [Angular frontend](#angular-frontend)
+  - [Feed](#feed)
+  - [Feed Dashboard](#feed-dashboard)
+  - [Pi-Hole dashboard](#pi-hole-dashboard)
+  - [Feed Dashboard](#feed-dashboard)
+- [DNS](#dns)
+- [Pi-Hole](#pi-hole)
+- [Cloudflared (DoH)](#cloudflared)
+- [Overzicht gebruikte prooten](#overzicht-gebruikte-poorten)
+
 ### Backend
 
 De backend is een nodejs applicatie die runt op poort 3000, een node alpine container. De backend dient vooral om de rss feeds op te slagen die je via de webinterface (zie verder) kunt toevoegen. Ook voor de lijst met rss feed content te krijgen zal hiervan gepulled worden. De volgende routes zijn beschikbaar op /api/:
@@ -21,7 +34,7 @@ De backend is een nodejs applicatie die runt op poort 3000, een node alpine cont
 - savedsearches (post): Voegt een savedsearch toe aan de database.
 - savedsearches (delete): Verwijderd een savedsearch uit de database.
 
-### angular-frontend
+### Angular frontend
 
 Dit is de angular (v17) applicatie die 3 web pagina's heeft:
 
