@@ -2,7 +2,7 @@
 
 De repo bestaat uit 2 grote delen:
 
-- De threath analysis website gebaseerd op angular
+- De threath analysis website gebaseerd op angular met een nodejs backend
 - De DNS server gebasseerd op pihole
 
 ## Threath analysis
@@ -25,11 +25,37 @@ De backend is een nodejs applicatie die runt op poort 3000, een node alpine cont
 
 Dit is de angular (v17) applicatie die 3 web pagina's heeft:
 
-- Feed: Een lijst met alle feeds die geactiveerd zijn, op deze pagina kan je ook zaken opzoeken in de rss feed. Je kan filteren op woorden, datums en de expliciete rss feed die je wilt gebruiken. Ook kan je zoekopdrachten opslaan zodat je ze niet elke keer handmatig hoeft in te geven.
-- Feed dashboard: Hier kan je rss feeds toevoegen waarvan je wilt dat de articles op de feed pagina komen. Je kan ook rss feeds verwijderen of deze in of uitschakelen.
-- Pi-hole dashoard: Een pagine met een beperkte weergaven van de DNS gegevens die door pi-hole gaan.
+#### Feed
+Een lijst met alle feeds die geactiveerd zijn, op deze pagina kan je ook zaken opzoeken in de rss feed. Je kan filteren op woorden, datums en de expliciete rss feed die je wilt gebruiken. Ook kan je zoekopdrachten opslaan zodat je ze niet elke keer handmatig hoeft in te geven.
+<div style="text-align: center;">
+  <img src="img/angular-aggregated-feed.JPG" alt="angular /aggregated-feed pagina"><br>
+  <span style="font-size: 10px;"><i>angular /aggregated-feed pagina</i></span>
+</div>
 
-De angular frontend is bereikbaar via http://{your_ip}:4201.
+#### Feed dashboard
+Hier kan je rss feeds toevoegen waarvan je wilt dat de articles op de feed pagina komen. Je kan ook rss feeds verwijderen of deze in of uitschakelen.
+<div style="text-align: center;">
+  <img src="img/angular-feed-dashboard.JPG" alt="angular /feed-dashboard pagina"><br>
+  <span style="font-size: 10px;"><i>angular /feed-dashboard pagina</i></span>
+</div>
+
+#### Pi-hole dashboard
+Een pagina met een beperkte weergaven van de DNS gegevens die door pi-hole gaan.
+<div style="text-align: center;">
+  <img src="img/angular-pihole.JPG" alt="angular /pihole-dashboard pagina"><br>
+  <span style="font-size: 10px;"><i>angular /pihole-dashboard pagina</i></span>
+</div>
+<br>
+
+De angular frontend is bereikbaar via: 
+```
+http://{your_ip}:4201
+```
+Ook staat poort 49153 open. Door deze poort open te zetten is het mogelijk om live wijzigingen aan te brengen in angluar zonder dus altijd je docker containers opnieuw te moeten opstarten. Indien er deze feature niet gewenst is kan men het beste deze lijn verwijderen uit de docker-compose.yml onder frontend ==> ports:
+```
+- "49153:49153"
+```
+
 
 ### MongoDB
 
@@ -66,7 +92,22 @@ ENV WEBPASSWORD=changeme
 
 De pi-hole draait op een ubuntu, er wordt dus geen gebruik gemaakt van de pihole docker image. We hebben dit bewust niet gedaan aangezien we op deze manier het onderliggend operating system meer up to date kunnen houden en zo dus minder kwetsbaarheden in het systeem hebben, anders zou je moeten wachten tot de maker van de pi-hole image dit updaten. Dit maakt de Dockerfile natuurlijk een stuk complexer.
 
-Het pi-hole dashboard is bereikbaar via http://{your_ip}:8080/admin. De pi-hole zal de dan als het niks in zijn eigen records vindt de dns doorsturen naar onze cloudflared.
+<div style="text-align: center;">
+  <img src="img/pi-hole_login.JPG" alt="Pi-hole login screen"><br>
+  <span style="font-size: 10px;"><i>Pi-hole login screen</i></span>
+</div>
+<br>
+
+Het pi-hole dashboard is bereikbaar via 
+```
+http://{your_ip}:8080/admin
+```
+De pi-hole zal de dan als het niks in zijn eigen records vindt de dns doorsturen naar onze cloudflared.
+
+<div style="text-align: center;">
+  <img src="img/pi-hole_dashboard.JPG" alt="Pi-hole login screen"><br>
+  <span style="font-size: 10px;"><i>Pi-hole dashboard</i></span>
+</div>
 
 ### Cloudflared
 
@@ -97,7 +138,3 @@ Naast de verschillende containers wordt er ook een default netwerk gemaakt. Ook 
 - 49153 (angular) ==> Zorgt ervoor dat er live wijzegingen kunnen gemaakt worden
 - 3000 (backend) ==> De API
 - 27017 (mongoDB) ==> De database
-
-## Standaard rss feeds
-
-MOET NOG AANGEVULD WORDEN!!!!!
