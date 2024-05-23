@@ -8,16 +8,8 @@ ul {
   display: inline;
 }
 /* aggregated-feed.component.css */
-.saved-search-term {
-  cursor: pointer;
-  margin-right: 5px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-.saved-search-term.active {
-  background-color: #007ad9;
-  color: #fff;
+.p-card-link {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  border: full 1px black;
 }

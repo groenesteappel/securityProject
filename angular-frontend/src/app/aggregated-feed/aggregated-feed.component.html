@@ -60,13 +60,24 @@
   </div>
   <div *ngIf="!isLoading">
     <div *ngFor="let item of filteredFeedItems" class="card">
-      <p-card>
-        <div class="p-card-title">{{ item.title }}, {{ item.name }}</div>
-        <div class="p-card-subtitle">{{ item.pubDate | date }}</div>
-        <div
-          class="p-card-content"
-          [innerHTML]="item.content || item.description"
-        ></div>
+      <p-card class="custom-card">
+        <ng-template pTemplate="title">
+          <div class="p-card-title">{{ item.title }}</div>
+        </ng-template>
+        <ng-template pTemplate="subtitle">
+          <div class="p-card-subtitle">
+            {{ item.pubDate | date : "fullDate" }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <div
+            class="p-card-content"
+            [innerHTML]="item.content || item.description"
+          ></div>
+          <a [href]="item.link" target="_blank" class="p-card-link">
+            <i class="pi pi-external-link" aria-hidden="true"></i>
+          </a>
+        </ng-template>
       </p-card>
     </div>
   </div>

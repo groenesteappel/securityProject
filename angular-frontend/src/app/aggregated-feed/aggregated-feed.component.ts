@@ -21,6 +21,7 @@ import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-aggregated-feed',
@@ -45,6 +46,7 @@ import { MenuItem } from 'primeng/api';
     IconFieldModule,
     InputIconModule,
     ContextMenuModule,
+    TagModule,
   ],
   templateUrl: './aggregated-feed.component.html',
   styleUrls: ['./aggregated-feed.component.css'],
