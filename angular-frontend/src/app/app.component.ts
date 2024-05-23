@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MenubarModule } from 'primeng/menubar';
 import { FeedManagerComponent } from './feed-manager/feed-manager.component';
 import { PiholeComponentComponent } from './pihole-component/pihole-component.component';
-import { MenubarModule } from 'primeng/menubar';
-import { NavigationEnd } from '@angular/router';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -36,13 +31,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.gfg = [
       {
-        label: 'Feed',
-        routerLink: ['/aggregated-feed'],
-        command: () => {
-          this.applyActiveStyles();
-        },
-      },
-      {
         label: 'Feed Dashboard',
         routerLink: ['/feed-dashboard'],
         command: () => {
@@ -50,7 +38,7 @@ export class AppComponent implements OnInit {
         },
       },
       {
-        label: 'pi-hole Dashboard',
+        label: 'Pi-hole Dashboard',
         routerLink: ['/pihole-dashboard'],
         command: () => {
           this.applyActiveStyles();

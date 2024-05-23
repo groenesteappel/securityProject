@@ -1,0 +1,10 @@
+.menu-logo {
+  width: 2rem; /* Adjust the width as needed */
+  height: auto;
+  vertical-align: middle;
+}
+
+.active-menu-item {
+  font-weight: bold;
+  color: #007ad9;
+}

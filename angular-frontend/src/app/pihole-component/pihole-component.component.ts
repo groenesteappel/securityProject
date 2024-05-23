@@ -16,6 +16,6 @@ export class PiholeComponentComponent implements OnInit {
   constructor(private piholeService: PiholeService) {}
 
   ngOnInit(): void {
-    window.location.href = 'http://localhost:8080/admin'; // Redirects to the Pi-hole dashboard
+    window.open('http://localhost:8080/admin', '_blank');
   }
 }
