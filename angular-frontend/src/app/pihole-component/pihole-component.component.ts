@@ -16,6 +16,6 @@ export class PiholeComponentComponent implements OnInit {
   constructor(private piholeService: PiholeService) {}
 
   ngOnInit(): void {
-    window.open('http://localhost:8080/admin', '_blank');
+    window.open('http://localhost:8081/admin', '_blank');
   }
 }

@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RssFeedService {
-  private baseUrl = 'http://127.0.0.1:3000/api'; // Adjust as needed
+  private baseUrl = 'http://127.0.0.1:3001/api'; // Adjust as needed
 
   constructor(private http: HttpClient) {}
 
