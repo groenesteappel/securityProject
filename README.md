@@ -151,3 +151,12 @@ Naast de verschillende containers wordt er ook een default netwerk gemaakt. Ook 
 - 49153 (angular) ==> Zorgt ervoor dat er live wijzegingen kunnen gemaakt worden
 - 3000 (backend) ==> De API
 - 27017 (mongoDB) ==> De database
+
+## RSS-Feed-Example Links
+```
+  https://msrc.microsoft.com/blog/feed
+  https://advisories.ncsc.nl/rss/advisories
+  https://www.cisa.gov/cybersecurity-advisories/all.xml
+  https://oval.mitre.org/news/rss/ovalnews.feed.xml
+  https://www.zerodayinitiative.com/rss/upcoming/
+```
