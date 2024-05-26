@@ -292,4 +292,10 @@ export class AggregatedFeedComponent implements OnInit {
     console.log('getSearchString called, activeTerms:', activeTerms);
     return activeTerms; // Return only active terms without appending searchTerm
   }
+
+  getLimitedLines(text: string, limit: number): string {
+    if (!text) return '';
+    const lines = text.split('\n');
+    return lines.slice(0, limit).join('<br>');
+  }
 }
