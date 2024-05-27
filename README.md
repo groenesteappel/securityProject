@@ -22,7 +22,7 @@ De repo bestaat uit 2 grote delen:
 
 ### Backend
 
-De backend is een nodejs applicatie die runt op poort 3000, een node alpine container. De backend dient vooral om de rss feeds op te slagen die je via de webinterface (zie verder) kunt toevoegen. Ook voor de lijst met rss feed content te krijgen zal hiervan gepulled worden. De volgende routes zijn beschikbaar op /api/:
+De backend is een nodejs applicatie die runt op poort 3001, een node alpine container. De backend dient vooral om de rss feeds op te slagen die je via de webinterface (zie verder) kunt toevoegen. Ook voor de lijst met rss feed content te krijgen zal hiervan gepulled worden. De volgende routes zijn beschikbaar op /api/:
 
 - feed (get): heeft een parameter url nodig en zal vervolgens alle rss articles weergeven voor het des betreffende rss url.
 - addUrls (post): Deze api call zal een speciefieke urls toevoegen waar de feeds van gelezen worden.
@@ -53,16 +53,13 @@ Hier kan je rss feeds toevoegen waarvan je wilt dat de articles op de feed pagin
 </div>
 
 #### Pi-hole dashboard
-Een pagina met een beperkte weergaven van de DNS gegevens die door pi-hole gaan.
-<div style="text-align: center;">
-  <img src="img/angular-pihole.JPG" alt="angular /pihole-dashboard pagina"><br>
-  <span style="font-size: 10px;"><i>angular /pihole-dashboard pagina</i></span>
-</div>
+Een pagina die doorverwijst naar de admin pagina van de pi-hole.
+
 <br>
 
 De angular frontend is bereikbaar via: 
 ```
-http://{your_ip}:4201
+http://{your_ip}:86
 ```
 Ook staat poort 49153 open. Door deze poort open te zetten is het mogelijk om live wijzigingen aan te brengen in angluar zonder dus altijd je docker containers opnieuw te moeten opstarten. Indien er deze feature niet gewenst is kan men het beste deze lijn verwijderen uit de docker-compose.yml onder frontend ==> ports:
 ```
@@ -113,7 +110,7 @@ De pi-hole draait op een ubuntu, er wordt dus geen gebruik gemaakt van de pihole
 
 Het pi-hole dashboard is bereikbaar via 
 ```
-http://{your_ip}:8080/admin
+http://{your_ip}:8082/admin
 ```
 De pi-hole zal de dan als het niks in zijn eigen records vindt de dns doorsturen naar onze cloudflared.
 
@@ -144,12 +141,12 @@ Naast de verschillende containers wordt er ook een default netwerk gemaakt. Ook 
 
 ## Overzicht gebruikte poorten
 
-- 8080 (pi-hole) ==> De webinterface van pi-hole
+- 8082 (pi-hole) ==> De webinterface van pi-hole
 - 53 (pi-hole) ==> De DNS van pi-hole
 - 5053/udp (cloudflared)
-- 4201 (angular) ==> De webinterface van angular
+- 86 (angular) ==> De webinterface van angular
 - 49153 (angular) ==> Zorgt ervoor dat er live wijzegingen kunnen gemaakt worden
-- 3000 (backend) ==> De API
+- 3001 (backend) ==> De API
 - 27017 (mongoDB) ==> De database
 
 ## RSS-Feed-Example Links
