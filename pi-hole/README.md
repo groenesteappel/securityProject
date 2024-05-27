@@ -83,7 +83,11 @@ Een uitgebreide gids voor het gebruik van de Pi-hole webinterface.
 
 ### 10. Local DNS
 
+   - Beheer lokale DNS-records en CNAME-records.
+
 ### 11. Tools
+
+   - Voer onderhoudstaken uit, zoals het bijwerken van blocklists en het genereren van debug tokens.
 
 ## Veelvoorkomende Taken
 
