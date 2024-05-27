@@ -1,5 +1,28 @@
 # Pi-hole Webinterface Gebruikersgids
 
+Een uitgebreide gids voor het gebruik van de Pi-hole webinterface.
+
+## Inhoudsopgave
+
+1. [Toegang tot de Webinterface](#toegang-tot-de-webinterface)
+2. [Dashboard Overzicht](#dashboard-overzicht)
+3. [Navigatiemenu](#navigatiemenu)
+    - [Dashboard](#dashboard)
+    - [Query Log](#query-log)
+    - [Long-term Data](#long-term-data)
+    - [Groups](#groups)
+    - [Clients](#clients)
+    - [Domains](#domains)
+    - [Adlists](#adlists)
+    - [Disable Blocking](#disable-blocking)
+    - [Local DNS](#local-dns)
+    - [Tools](#tools)
+4. [Veelvoorkomende Taken](#veelvoorkomende-taken)
+5. [Nuttige Links](#nuttige-links)
+6. [Ondersteuning](#ondersteuning)
+
+---
+
 ## Toegang tot de Webinterface
 
 1. **Open je webbrowser.**
@@ -30,7 +53,7 @@
 
 ### 3. **Long-term Data**
 
-   - De optie voor langdurige gegevens geeft je toegang tot historische gegevens over het gebruik van Pi-hole. 
+   - De optie voor langdurige gegevens geeft je toegang tot historische gegevens over het gebruik van Pi-hole.
 
 ### 4. **Groups**
 
