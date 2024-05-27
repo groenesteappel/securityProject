@@ -28,39 +28,39 @@
    - Toont een gedetailleerd logboek van alle DNS-vragen die op je netwerk zijn gemaakt.
    - Je kunt domeinen rechtstreeks vanuit dit logboek op de whitelist of blacklist zetten.
 
-### 3. **Whitelist**
+### 3. **Long-term Data**
 
-   - Voeg domeinen toe of verwijder deze die je altijd wilt toestaan.
+   - De optie voor langdurige gegevens geeft je toegang tot historische gegevens over het gebruik van Pi-hole. 
 
-### 4. **Blacklist**
+### 4. **Groups**
 
    - Voeg domeinen toe of verwijder deze die je altijd wilt blokkeren.
 
-### 5. **Group Management**
-
-   - Beheer adlists, clients en groepen voor meer gedetailleerde controle over welke clients door welke blocklists worden beïnvloed.
-
-### 6. **Adlists**
+### 6. **Clients**
 
    - Voeg adlists toe of verwijder deze, dit zijn lijsten van domeinen die bekend staan om advertenties of trackingcontent te serveren.
 
-### 7. **Tools**
+### 7. **Domains**
 
    - **Update Gravity:** Forceer een update van alle blocklists.
    - **Generate Debug Token:** Genereer een token voor debugging als je hulp nodig hebt van de Pi-hole community.
    - **Network:** Bekijk alle apparaten die momenteel met je netwerk zijn verbonden.
 
-### 8. **Settings**
+### 8. **Adlists**
 
    - **System:** Beheer Pi-hole instellingen zoals DNS-servers, interface-instellingen en logging.
    - **DHCP:** Configureer Pi-hole om als je DHCP-server te fungeren, en IP-adressen uit te geven aan apparaten op je netwerk.
    - **API / Web Interface:** Beheer API- en webinterface-instellingen.
    - **Teleporter:** Maak een backup en herstel je Pi-hole configuratie.
 
-### 9. **Local DNS**
+### 9. **Disbable Blocking**
 
    - **Local DNS Records:** Beheer aangepaste DNS records voor je lokale netwerk.
    - **CNAME Records:** Beheer Canonical Name (CNAME) records om aliasnamen in te stellen voor bestaande DNS-namen.
+
+### 10. Local DNS
+
+### 11. Tools
 
 ## Veelvoorkomende Taken
 
@@ -102,10 +102,8 @@
 ### Nuttige Links
 
 - Voor meer informatie over dnsmasq configuratie: [dnsmasq.conf.example](https://github.com/imp/dnsmasq/blob/master/dnsmasq.conf.example)
-- Voor informatie over DNSSEC Root Key Signing Key: [IANA DNSSEC](https://www.iana.org/dnssec/files#:~:text=The%20Root%20Key%20Signing%20Key,facilitate%20validation%20of%20DNS%20data.)
+- Voor informatie over DNSSEC Root Key Signing Key: [IANA DNSSEC](https://www.iana.org/dnssec/files#:~:text=The%20Root%20Key%20Signing%20Key,facilitate%20validation%20of%20DNS%20data%20for%20all%20users%20across%20the%20world.)
 
 ## Ondersteuning
 
 Voor extra hulp, bezoek de [Pi-hole documentatie](https://docs.pi-hole.net/) of de [Pi-hole community forums](https://discourse.pi-hole.net/).
-
-
